@@ -1,49 +1,124 @@
-import joinArgs from "@utils/joinArgs";
-import { Link, useNavigate } from "react-router-dom";
-import { accountServices } from "@views/Account";
+import joinArgs from '@utils/joinArgs';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { accountServices } from '@views/Account';
+import LogoLinkeep from '../../../assets/logo.svg';
 
 //icons + styling + motion
-import { styles } from "./navigation.styles";
-import { LogoutIcon, ViewBoardsIcon } from "@heroicons/react/outline";
-import { CogIcon, MoonIcon, HomeIcon } from "@heroicons/react/solid";
+import { animation, styles } from './navigation.styles';
+import { useEffect, useState } from 'react';
+import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
+import { CogIcon, HomeIcon, LogoutIcon } from '@heroicons/react/solid';
 
-interface INavigation {
-  isAuthenticated: boolean;
-}
+const { Wrapper, Items, Logo } = styles;
 
-const { Wrapper, Items } = styles;
-
-function Navigation({ isAuthenticated }: INavigation) {
+function Navigation() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  console.log(pathname);
+
+  const token = useVerifyAuthToken();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('access')) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+
+    if (token.isSuccess && token?.data !== 'undefined') {
+      localStorage.setItem('access', token?.data?.access);
+      setIsAuthenticated(true);
+    } else {
+      localStorage.removeItem('access');
+      setIsAuthenticated(false);
+    }
+  }, [token]);
+
   const logout = () => {
     accountServices.logoutUser();
-    localStorage.removeItem("access");
-    navigate("/");
+    localStorage.removeItem('access');
+    navigate('/');
+    location.reload();
   };
   return (
     <div>
       <nav className={joinArgs(Wrapper)}>
-        <div className={joinArgs(Items)}>
-          <Link to="/">
-            <HomeIcon width={24} height={24} />
-          </Link>
-          <Link to="">
-            <MoonIcon width={24} height={24} />
-          </Link>
-          {isAuthenticated && (
-            <Link to="dashboard">
-              <ViewBoardsIcon width={24} height={24} />
-            </Link>
-          )}
-          <Link to="auth">
-            <CogIcon width={24} height={24} />
-          </Link>{" "}
-          {isAuthenticated && (
-            <Link to="" onClick={logout}>
-              <LogoutIcon width={24} height={24} />
-            </Link>
-          )}
+        <div className={joinArgs(Logo)}>
+          <img src={LogoLinkeep} width={32} height={32} className='mr-2' />
+          <button onClick={() => navigate('/')}>Linkeep</button>
+          <span className='bg-gradient-to-r from-blue-700 to-indigo-800 shadow-sm text-white text-[0.5em] w-[fit-content] uppercase rounded-md ml-2 px-2 font-bold'>
+            ALPHA VERSION
+          </span>
         </div>
+        {pathname !== '/dashboard' ? (
+          <>
+            <div className={joinArgs(Items)}>
+              {isAuthenticated && (
+                <Link
+                  to='dashboard'
+                  className={joinArgs([animation.Item, styles.Item])}
+                >
+                  Dashboard
+                </Link>
+              )}
+              <Link
+                to='/extensions'
+                className={joinArgs([animation.Item, styles.Item])}
+              >
+                Extensions
+              </Link>
+              <Link
+                to='/faq'
+                className={joinArgs([animation.Item, styles.Item])}
+              >
+                Frequently Asked Questions
+              </Link>
+            </div>
+            <div className={joinArgs(Items)}>
+              {!isAuthenticated && (
+                <Link
+                  to='auth'
+                  className={joinArgs([
+                    'bg-transparent  border-[1px] border-white  rounded-full py-2 px-4 hover:scale-95 transition-all hover:bg-white hover:text-slate-900',
+                  ])}
+                >
+                  Create account
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link
+                  to=''
+                  onClick={logout}
+                  className={joinArgs([
+                    'bg-transparent  border-[1px] border-white  rounded-full py-2 px-4 hover:scale-95 transition-all hover:bg-white hover:text-slate-900',
+                  ])}
+                >
+                  Log out
+                </Link>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className={joinArgs(styles.dashboardNavIcons)}>
+            <Link to='/' className={joinArgs([styles.Logo, animation.Logo])}>
+              <HomeIcon width={20} height={20} />
+            </Link>
+            <Link
+              to='/account'
+              className={joinArgs([animation.Logo, styles.Logo])}
+            >
+              <CogIcon width={20} height={20} />
+            </Link>
+            <Link
+              to=''
+              onClick={logout}
+              className={joinArgs([animation.Logo, styles.Logo])}
+            >
+              <LogoutIcon width={20} height={20} />
+            </Link>
+          </div>
+        )}
       </nav>
     </div>
   );

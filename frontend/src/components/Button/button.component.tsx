@@ -1,11 +1,11 @@
 //native imports
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes } from 'react';
 
 //components, utils and interfaces
-import joinArgs from "@utils/joinArgs";
+import joinArgs from '@utils/joinArgs';
 
 //styles/motion/icons/graphics
-import { styles } from "@components/Button";
+import { buttonStyles } from '@components/Button';
 
 interface IButton extends HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -14,7 +14,10 @@ interface IButton extends HTMLAttributes<HTMLButtonElement> {
 
 const Button = ({ children, className, ...rest }: IButton) => {
   return (
-    <button className={joinArgs(styles.defaults) + " " + className} {...rest}>
+    <button
+      className={joinArgs(buttonStyles.defaults) + ' ' + className}
+      {...rest}
+    >
       {children}
     </button>
   );

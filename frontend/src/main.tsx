@@ -1,36 +1,36 @@
 //native
-import React from "react";
-import ReactDOM from "react-dom/client";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
 //styles
-import "./index.css";
+import './index.css';
 
 // views/components
-import App from "./App";
-import { Login } from "@views/Login";
-import { Dashboard } from "@views/Dashboard";
-import { Account } from "@views/Account";
-import { NotFound } from "@views/NotFound";
-import { Home } from "@views/Home";
+import App from './App';
+import { Login } from '@views/Login';
+import { Dashboard } from '@views/Dashboard';
+import { Account } from '@views/Account';
+import { NotFound } from '@views/NotFound';
+import { Home } from '@views/Home';
 
 //router + query
-import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />}>
+          <Route path='/' element={<App />}>
             <Route index element={<Home />} />
-            <Route path="auth" element={<Account />} />
-            <Route path="auth/login" element={<Login />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path='auth' element={<Account />} />
+            <Route path='auth/login' element={<Login />} />
+            <Route path='dashboard' element={<Dashboard />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

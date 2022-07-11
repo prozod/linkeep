@@ -1,4 +1,4 @@
-import { styles, animations } from "./button.styles";
-import Button from "./button.component";
+import { buttonAnimations, buttonStyles } from './button.styles';
+import Button from './button.component';
 
-export { styles, animations, Button };
+export { buttonStyles, buttonAnimations, Button };

@@ -1,25 +1,29 @@
+import { Navigation } from '@components/Navigation';
 import { Sidebar } from '@components/Sidebar';
 import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
 import joinArgs from '@utils/joinArgs';
-import { styles } from './dashboard.styles';
+import { dashboardStyles } from './dashboard.styles';
 
 const Dashboard = () => {
-  const { isLoading, isError, data } = useVerifyAuthToken();
-
-  if (isLoading) {
-    return <span>Loading...</span>;
-  }
-  if (isError) {
-    return <span>There was an error.</span>;
-  }
+  const { isSuccess, isLoading, isError, data } = useVerifyAuthToken();
 
   return (
-    <div className={joinArgs(styles.body)}>
-      <Sidebar />
-      <div className={joinArgs(styles.content)}>
-        <p>Welcome to your dashboard, {data?.user.email}!</p>
+    <>
+      <Navigation />
+      <div className={joinArgs(dashboardStyles.body)}>
+        {isLoading && <span>Loading...</span>}
+
+        {isError && <span>There was an error.</span>}
+        {isSuccess && (
+          <>
+            <Sidebar />
+            <div className={joinArgs(dashboardStyles.content)}>
+              <p>Welcome to your dashboard, {data?.user.email}!</p>
+            </div>
+          </>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

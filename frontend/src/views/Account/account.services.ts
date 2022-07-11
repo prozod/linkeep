@@ -1,13 +1,15 @@
-const url = "http://localhost:5000";
+import { queryClient } from 'main';
+
+const url = 'http://localhost:5000';
 
 const accountServices = {
   loginUser: async function <T>(data: T) {
     const res = await fetch(`${url}/users/login`, {
-      method: "POST",
+      method: 'POST',
       // credentials: 'same-origin',
-      credentials: "include",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
@@ -17,10 +19,10 @@ const accountServices = {
 
   logoutUser: async function () {
     const res = await fetch(`${url}/users/logout`, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const resData = res.json();
@@ -29,10 +31,10 @@ const accountServices = {
 
   registerUser: async function <T>(data: T) {
     const res = await fetch(`${url}/users/register`, {
-      method: "POST",
-      credentials: "same-origin",
+      method: 'POST',
+      credentials: 'same-origin',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
@@ -42,10 +44,10 @@ const accountServices = {
 
   checkAuthToken: async function () {
     const res = await fetch(`${url}/token`, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const resData = res.json();
