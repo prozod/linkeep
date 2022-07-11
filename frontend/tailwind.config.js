@@ -9,6 +9,9 @@ module.exports = {
         // Complex site-specific column configuration
         sidebar: '250px minmax(900px, 1fr)',
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
     },
     plugins: [],
   },

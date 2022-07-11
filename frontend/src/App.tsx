@@ -6,7 +6,9 @@ function App() {
   return (
     <>
       <Outlet />
-      <ReactQueryDevtools initialIsOpen />
+      {
+        // <ReactQueryDevtools initialIsOpen />
+      }
     </>
   );
 }

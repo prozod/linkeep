@@ -2,7 +2,7 @@ import { queryClient } from 'main';
 
 const url = 'http://localhost:5000';
 
-const accountServices = {
+const authServices = {
   loginUser: async function <T>(data: T) {
     const res = await fetch(`${url}/users/login`, {
       method: 'POST',
@@ -55,4 +55,4 @@ const accountServices = {
   },
 };
 
-export default accountServices;
+export default authServices;

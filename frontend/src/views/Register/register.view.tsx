@@ -4,7 +4,7 @@ import useAuth from '@hooks/useAuth';
 import joinArgs from '@utils/joinArgs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginStyles } from './login.styles';
+import { registerStyles } from './register.styles';
 
 type Login = {
   email: string;
@@ -19,13 +19,14 @@ type Register = {
 
 export type ServicesType = Login | Register;
 
-const Login = () => {
+const Register = () => {
   const [inputData, setInputData] = useState<ServicesType>({
     email: '',
     password: '',
   });
 
   const navigate = useNavigate();
+
   const mutation = useAuth('login');
   const userExists = mutation.isSuccess && mutation.data.id !== undefined;
 
@@ -49,16 +50,15 @@ const Login = () => {
   }, [mutation.isSuccess]);
 
   return (
-    <div className={joinArgs(loginStyles.wrapper)}>
+    <div className={joinArgs(registerStyles.wrapper)}>
       <Navigation />
-      <div className={joinArgs(loginStyles.body)}>
+      <div className={joinArgs(registerStyles.body)}>
         <Form
           onSubmit={onSubmit}
           onChange={onChange}
           data={inputData}
-          text={' Please log in below to continue '}
-          ctaText={'Log In'}
-          type='login'
+          text='Fill in the fields below to create a new account.'
+          ctaText='Register'
         />
         {mutation.isLoading ? 'Loading user data...' : null}
         {mutation.isSuccess ? <div>{mutation.data.message}</div> : null}
@@ -68,4 +68,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

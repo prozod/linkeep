@@ -1,5 +1,5 @@
-import { accountServices } from "@views/Account";
-import { useMutation } from "react-query";
+import { authServices } from '@views/Auth';
+import { useMutation } from 'react-query';
 
 type Login = {
   email: string;
@@ -22,17 +22,17 @@ interface SuccessResponse {
   access?: string;
 }
 
-type AuthActionTypes = "login" | "register";
+type AuthActionTypes = 'login' | 'register';
 
 const useAuth = (action: AuthActionTypes) => {
   return useMutation<SuccessResponse, React.ReactNode, ServicesType>((data) => {
     return new Promise((resolve, reject) => {
       switch (action) {
-        case "login":
-          resolve(accountServices.loginUser(data));
+        case 'login':
+          resolve(authServices.loginUser(data));
           break;
-        case "register":
-          resolve(accountServices.registerUser(data));
+        case 'register':
+          resolve(authServices.registerUser(data));
           break;
       }
       reject((err: string) => err);

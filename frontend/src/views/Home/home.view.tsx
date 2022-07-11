@@ -41,7 +41,7 @@ function Home() {
                 buttonStyles.heroCTA,
               ])}
               onClick={() => {
-                navigate('/auth');
+                navigate('/auth/register');
               }}
             >
               Try it out now!
@@ -61,7 +61,7 @@ function Home() {
         </div>
       </section>
       <footer className='w-full flex justify-center items-center py-4 px-8 border-t-[1px] border-white border-opacity-20 z-10'>
-        <div className='m-auto  flex justify-between w-2/4 font-medium text-sm'>
+        <div className='m-auto  flex justify-between px-2 w-full opacity-70 font-thin text-xs'>
           <p>Linkeep © Copyright 2022</p>
           <a
             href='https://github.com/t0ux'
