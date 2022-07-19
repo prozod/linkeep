@@ -4,5 +4,5 @@ export const dashboardStyles = {
   button: [
     'text-white mr-1 mt-4 py-2 px-4 bg-indigo-500 rounded-md hover:bg-indigo-400 hover:cursor-pointer hover:scale-95 transition-all',
   ],
-  content: ['flex justify-center items-center h-full'],
+  content: ['p-4 mx-2 pt-0 h-full'],
 };

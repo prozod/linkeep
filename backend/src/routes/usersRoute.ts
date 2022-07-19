@@ -4,7 +4,7 @@ import { authenticateToken } from '../middlewares/authMiddleware';
 const router = express.Router();
 
 // -------------------------------------
-// ---------- USER QUERIES -----------
+// ---------- USER QUERIES -------------
 
 // QUERY ALL USERS
 router.get('/', usersController.QueryUsers);

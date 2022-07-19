@@ -19,7 +19,7 @@ export default function Sidebar() {
         <CollectionItem name='Online courses' />
       </div>
       <div className={joinArgs([items, animation.items])}>
-        <CollectionItem name='Anime' />
+        <CollectionItem name='personal growth' />
       </div>
       <div className={joinArgs([items, animation.items])}>
         <CollectionItem name='Music production' />

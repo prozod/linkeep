@@ -54,6 +54,7 @@ const Register = () => {
       <Navigation />
       <div className={joinArgs(registerStyles.body)}>
         <Form
+          type='register'
           onSubmit={onSubmit}
           onChange={onChange}
           data={inputData}
