@@ -4,12 +4,12 @@ import { authServices } from '@views/Auth';
 import LogoLinkeep from '../../../assets/logo.svg';
 
 //icons + styling + motion
-import { animation, styles } from './navigation.styles';
+import { navigationAnimation, navigationStyles } from './navigation.styles';
 import { useEffect, useState } from 'react';
 import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
 import { CogIcon, HomeIcon, LogoutIcon } from '@heroicons/react/solid';
 
-const { Wrapper, Items, Logo } = styles;
+const { Wrapper, Items, Logo } = navigationStyles;
 
 function Navigation() {
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ function Navigation() {
     navigate('/');
     location.reload();
   };
+
   return (
     <div>
       <nav className={joinArgs(Wrapper)}>
@@ -53,27 +54,42 @@ function Navigation() {
         {pathname !== '/dashboard' ? (
           <>
             <div className={joinArgs(Items)}>
-              <Link to='/' className={joinArgs([animation.Item, styles.Item])}>
+              <Link
+                to='/'
+                className={joinArgs([
+                  navigationAnimation.Item,
+                  navigationStyles.Item,
+                ])}
+              >
                 Home
               </Link>
 
               {isAuthenticated && (
                 <Link
                   to='/dashboard'
-                  className={joinArgs([animation.Item, styles.Item])}
+                  className={joinArgs([
+                    navigationAnimation.Item,
+                    navigationStyles.Item,
+                  ])}
                 >
                   Dashboard
                 </Link>
               )}
               <Link
                 to='/extensions'
-                className={joinArgs([animation.Item, styles.Item])}
+                className={joinArgs([
+                  navigationAnimation.Item,
+                  navigationStyles.Item,
+                ])}
               >
                 Extensions
               </Link>
               <Link
                 to='/faq'
-                className={joinArgs([animation.Item, styles.Item])}
+                className={joinArgs([
+                  navigationAnimation.Item,
+                  navigationStyles.Item,
+                ])}
               >
                 Frequently Asked Questions
               </Link>
@@ -92,7 +108,10 @@ function Navigation() {
               {!isAuthenticated && (
                 <Link
                   to='auth/login'
-                  className={joinArgs([animation.Item, styles.Item])}
+                  className={joinArgs([
+                    navigationAnimation.Item,
+                    navigationStyles.Item,
+                  ])}
                 >
                   Log in
                 </Link>
@@ -101,7 +120,10 @@ function Navigation() {
                 <Link
                   to=''
                   onClick={logout}
-                  className={joinArgs([animation.Item, styles.Item])}
+                  className={joinArgs([
+                    navigationAnimation.Item,
+                    navigationStyles.Item,
+                  ])}
                 >
                   Log out
                 </Link>
@@ -109,20 +131,32 @@ function Navigation() {
             </div>
           </>
         ) : (
-          <div className={joinArgs(styles.dashboardNavIcons)}>
-            <Link to='/' className={joinArgs([styles.Icons, animation.Logo])}>
+          <div className={joinArgs(navigationStyles.dashboardNavIcons)}>
+            <Link
+              to='/'
+              className={joinArgs([
+                navigationStyles.Icons,
+                navigationAnimation.Logo,
+              ])}
+            >
               <HomeIcon width={20} height={20} />
             </Link>
             <Link
               to='/account'
-              className={joinArgs([animation.Logo, styles.Icons])}
+              className={joinArgs([
+                navigationAnimation.Logo,
+                navigationStyles.Icons,
+              ])}
             >
               <CogIcon width={20} height={20} />
             </Link>
             <Link
-              to=''
+              to='/'
               onClick={logout}
-              className={joinArgs([animation.Logo, styles.Icons])}
+              className={joinArgs([
+                navigationAnimation.Logo,
+                navigationStyles.Icons,
+              ])}
             >
               <LogoutIcon width={20} height={20} />
             </Link>

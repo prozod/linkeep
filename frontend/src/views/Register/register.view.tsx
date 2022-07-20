@@ -27,7 +27,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const mutation = useAuth('login');
+  const mutation = useAuth('register');
   const userExists = mutation.isSuccess && mutation.data.id !== undefined;
 
   const onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -36,6 +36,8 @@ const Register = () => {
 
     //todo move the input data out, so that when the email exists but password is incorrect, only remove password.
     setInputData({ email: '', password: '' });
+    console.log('user registered');
+    navigate('/auth/login');
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

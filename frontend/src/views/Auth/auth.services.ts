@@ -1,5 +1,3 @@
-import { queryClient } from 'main';
-
 const url = 'http://localhost:5000';
 
 const authServices = {

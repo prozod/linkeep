@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { dashboardStyles } from './dashboard.styles';
 import collectionDat from '../../components/Card/data.json';
 import { Toolbar } from '@components/Toolbar';
+import { Modal } from '@components/Modal';
 
 const Dashboard = () => {
   const { isSuccess, isLoading, isError, data } = useVerifyAuthToken();

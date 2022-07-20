@@ -1,14 +1,30 @@
 import joinArgs from '@utils/joinArgs';
-import { cardStyles } from './card.styles';
 import { LinkPreview } from '@dhaiwat10/react-link-preview';
+import { cardStyles } from './card.styles';
+import { XCircleIcon } from '@heroicons/react/solid';
+import { useState } from 'react';
 
 interface ICard {
   url: string;
 }
 
 function Card({ url }: ICard) {
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
-    <div className={joinArgs(cardStyles.container)}>
+    <div
+      className={joinArgs(cardStyles.container)}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {isHovering && (
+        <XCircleIcon
+          width={36}
+          height={36}
+          className='absolute shadow-lg z-10 right-[-10px] bottom-[-10px] text-indigo-500 animate-pulse transition-all hover:animate-none'
+          onClick={() => console.log('X GOT CLICKED!')}
+        />
+      )}
       <LinkPreview
         url={url}
         width={300}

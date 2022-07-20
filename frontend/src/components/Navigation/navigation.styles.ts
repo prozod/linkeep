@@ -1,4 +1,4 @@
-export const styles = {
+export const navigationStyles = {
   Wrapper: [
     'bg-transparent backdrop-blur-xl text-white py-4 px-8 flex justify-between',
   ],
@@ -15,7 +15,7 @@ export const styles = {
   dashboardNavIcons: ['flex'],
 };
 
-export const animation = {
+export const navigationAnimation = {
   Item: [
     'hover:bg-slate-800 hover:border-[0.5px] hover:border-indigo-400  cursor-pointer',
   ],

@@ -16,4 +16,5 @@ COPY . .
 
 EXPOSE 5000
 
-CMD npx prisma migrate dev --name init && npm run dev
+# CMD npx prisma migrate deploy --name init && npm run dev
+CMD npx prisma migrate dev --schema ./prisma/schema.prisma && npm run dev

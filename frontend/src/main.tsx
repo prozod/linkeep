@@ -17,6 +17,7 @@ import { Home } from '@views/Home';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Register } from '@views/Register';
+import { Account } from '@views/Account';
 
 export const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path='auth/login' element={<Login />} />
             <Route path='auth/register' element={<Register />} />
             <Route path='dashboard' element={<Dashboard />} />
+            <Route path='account' element={<Account />} />
           </Route>
           <Route path='*' element={<NotFound />} />
         </Routes>
