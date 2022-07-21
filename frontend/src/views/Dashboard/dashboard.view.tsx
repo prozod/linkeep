@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { dashboardStyles } from './dashboard.styles';
 import collectionDat from '../../components/Card/data.json';
 import { Toolbar } from '@components/Toolbar';
-import { Modal } from '@components/Modal';
 
 const Dashboard = () => {
   const { isSuccess, isLoading, isError, data } = useVerifyAuthToken();
@@ -22,6 +21,8 @@ const Dashboard = () => {
       navigate('/');
     }
   }, [data]);
+
+  console.log(data.user);
 
   return (
     <div className={joinArgs(dashboardStyles.wrapper)}>

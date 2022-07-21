@@ -16,6 +16,9 @@ app.use('/users', usersRoute);
 const tokenRoute = require('./src/routes/tokenRoute');
 app.use('/token', tokenRoute);
 
+const collectionRoute = require('./src/routes/collectionRoute');
+app.use('/collection', collectionRoute);
+
 app.listen(PORT, () => {
   console.log(`Express server listening on port: ${PORT}`);
 });

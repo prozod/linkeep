@@ -12,7 +12,8 @@ export const authenticateToken = (
   const token = header && header.split(' ')[1];
   console.log('authTokenMiddleware', header);
   console.log('authTokenENV', process.env.JWT_ACCESS_TOKEN);
-  if (token == null) return res.status(401);
+  if (!header || token == null)
+    return res.status(403).send('Authorization Bearer token is missing!');
 
   jwt.verify(token, process.env.JWT_ACCESS_TOKEN, (err: any, user: any) => {
     if (err) return res.status(403).send(err);

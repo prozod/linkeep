@@ -11,10 +11,12 @@ datasource db {
 }
 
 model Collection {
-    id Int @id @default(autoincrement())
+    // id Int @id @default(autoincrement()) 
+    id String @unique @default(uuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     title String @db.VarChar(128)
+    items String[]
     owner User @relation(fields: [ ownerId ], references: [ id ])
     ownerId String
   }

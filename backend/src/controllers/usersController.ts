@@ -60,7 +60,12 @@ export const AuthenticateUser = async (req: Request, res: Response) => {
       message: "User doesn't exist in our database.",
     });
   } else if (passwordMatch) {
-    const user = { id: result?.id, name: result?.name, email: result?.email };
+    const user = {
+      id: result?.id,
+      name: result?.name,
+      email: result?.email,
+      collections: result?.collections,
+    };
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
