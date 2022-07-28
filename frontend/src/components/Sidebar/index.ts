@@ -1,4 +1,4 @@
-import Sidebar from "./sidebar.component";
-import { styles } from "./sidebar.styles";
+import Sidebar from './sidebar.component';
+import { sidebarStyles, sidebarAnimation } from './sidebar.styles';
 
-export { styles, Sidebar };
+export { sidebarAnimation, sidebarStyles, Sidebar };

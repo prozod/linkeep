@@ -1,34 +1,46 @@
 import joinArgs from '@utils/joinArgs';
+import ReactDOM from 'react-dom';
 import { modalStyles } from '@components/Modal';
-import { useState } from 'react';
+import { forwardRef } from 'react';
 
 interface IModal {
-  isOpen: boolean;
+  open: boolean;
+  elementId?: string;
+  children: JSX.Element | React.ReactNode;
 }
 
-function Modal({ isOpen }: IModal) {
-  const [openState, setOpenState] = useState(isOpen);
-  function handleClickOutside(e: any) {
-    if (e.currentTarget.dataset.name === 'background') {
-      setOpenState(false);
+const createWrapperAndAppendToBody = (elementId: string) => {
+  const newElement = document.createElement('div');
+  newElement.setAttribute('id', elementId);
+  document.body.appendChild(newElement);
+  return newElement;
+};
+
+const Modal = forwardRef(
+  (
+    { open, elementId = 'modal-portal', children }: IModal,
+    ref: React.ForwardedRef<HTMLDivElement | null>
+  ) => {
+    if (!open) return null;
+
+    const element = document.getElementById(elementId);
+    if (!element) {
+      createWrapperAndAppendToBody(elementId);
     }
-  }
 
-  return (
-    <>
-      {isOpen ? (
-        <div
-          className={joinArgs(modalStyles.background)}
-          data-name='background'
-          onClick={handleClickOutside}
-        >
-          <div className={joinArgs(modalStyles.modal)}>
-            <p>Modal here</p>
-          </div>
+    return ReactDOM.createPortal(
+      <div
+        className={joinArgs(modalStyles.background)}
+        data-id='modal-background'
+      >
+        <div className={joinArgs(modalStyles.modal)} data-id='modal' ref={ref}>
+          {children}
         </div>
-      ) : null}
-    </>
-  );
-}
+      </div>,
+      document.getElementById(elementId) as HTMLElement // we know this will always be an HTMLElement so we type assert it as one, since getElementById can return null || HTMLElement.
+    );
+  }
+);
 
+Modal.displayName = 'Modal';
 export default Modal;

@@ -1,10 +1,21 @@
-import styles from "./spinner.module.css";
+import styles from './spinner.module.css';
 
-interface ISpinner {
-  text?: string;
+export default function Spinner({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
 
-export default function Spinner({ text }: ISpinner) {
+Spinner.ThreeDots = function SpinnerTheeDots() {
+  return (
+    <div className={styles.ellipsis}>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  );
+};
+
+Spinner.Ball = function SpinnerBall({ text }: { text?: string }) {
   return (
     <div className={styles.spinner}>
       {text}
@@ -13,4 +24,4 @@ export default function Spinner({ text }: ISpinner) {
       </div>
     </div>
   );
-}
+};

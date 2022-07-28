@@ -64,7 +64,6 @@ export const AuthenticateUser = async (req: Request, res: Response) => {
       id: result?.id,
       name: result?.name,
       email: result?.email,
-      collections: result?.collections,
     };
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
@@ -74,7 +73,16 @@ export const AuthenticateUser = async (req: Request, res: Response) => {
       sameSite: 'strict',
       // secure: true, //localhost is http
     });
-
+    res.cookie('access', accessToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      // secure: true, //localhost is http
+    });
+    console.log('usersController Login', {
+      ...user,
+      access: accessToken,
+      refresh: refreshToken,
+    });
     res
       .status(200)
       .send({ ...user, access: accessToken, refresh: refreshToken });

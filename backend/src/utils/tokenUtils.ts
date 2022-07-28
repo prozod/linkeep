@@ -7,4 +7,4 @@ export const generateAccessToken = (data: any) =>
   jwt.sign(data, process.env.JWT_ACCESS_TOKEN, { expiresIn: '15m' });
 
 export const generateRefreshToken = (data: any) =>
-  jwt.sign(data, process.env.JWT_REFRESH_TOKEN);
+  jwt.sign(data, process.env.JWT_REFRESH_TOKEN, { expiresIn: '30d' });

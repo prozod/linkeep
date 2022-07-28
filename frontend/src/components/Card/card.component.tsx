@@ -43,3 +43,15 @@ function Card({ url }: ICard) {
 }
 
 export default Card;
+
+Card.Wrapper = function CardWrapper({
+  children,
+}: {
+  children: JSX.Element | React.ReactNode;
+}) {
+  return (
+    <div className='flex flex-wrap items-center gap-2 lg:gap-4 transition-all'>
+      {children}
+    </div>
+  );
+};

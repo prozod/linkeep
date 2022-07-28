@@ -31,7 +31,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path='auth' element={<Auth />} />
             <Route path='auth/login' element={<Login />} />
             <Route path='auth/register' element={<Register />} />
-            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='dashboard' element={<Dashboard />}>
+              <Route path='collection/:id' element={<Dashboard />} />
+            </Route>
+            <Route path='account' element={<Account />} />
             <Route path='account' element={<Account />} />
           </Route>
           <Route path='*' element={<NotFound />} />

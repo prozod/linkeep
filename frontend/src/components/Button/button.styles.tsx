@@ -7,9 +7,13 @@ export const buttonStyles = {
   hero: [
     'bg-transparent border-[1px] border-white text-white px-8 py-4 transition-all shadow-lg',
   ],
+  accountContainer: [
+    'px-4 py-2 bg-slate-700 text-white shadow-sm cursor-pointer',
+  ],
 };
 
 export const buttonAnimations = {
   outline: ['hover:bg-pink-300 hover:text-neutral-800 hover:scale-95'],
   heroCTA: ['hero:bg-indigo-400 hover:scale-95'],
+  accountContainer: ['hover:scale-95'],
 };

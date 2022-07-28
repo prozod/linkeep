@@ -58,9 +58,9 @@ export const LoginUser = async (email: string) => {
       where: {
         email: email,
       },
-      include: {
-        collections: true,
-      },
+      // include: {
+      //   collections: true,
+      // },
     });
 
     console.log('Login Trycatch Service:', query); // returns null - handle it

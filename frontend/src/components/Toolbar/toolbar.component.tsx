@@ -1,14 +1,20 @@
+import { Form, formStyles } from '@components/Form';
 import { Modal } from '@components/Modal';
 import { DotsCircleHorizontalIcon } from '@heroicons/react/outline';
 import { PlusIcon } from '@heroicons/react/solid';
+import useComponentVisible from '@hooks/useComponentVisible';
 import joinArgs from '@utils/joinArgs';
-import { useState } from 'react';
+import { createRef, useState } from 'react';
+import { ICollectionDataResponse } from 'types/dataTypes';
 import { toolbarStyles } from './toolbar.styles';
 
-function Toolbar() {
+const Toolbar = ({ collection }: { collection: ICollectionDataResponse }) => {
   const [showModal, setShowModal] = useState(false);
+  const modalRef = createRef<HTMLDivElement>();
+  useComponentVisible(modalRef, setShowModal);
+  console.log(collection);
+
   function handleAdd() {
-    console.log('add click');
     setShowModal(true);
   }
 
@@ -20,27 +26,48 @@ function Toolbar() {
         className={joinArgs(toolbarStyles.input)}
       />
       <div className={joinArgs(toolbarStyles.tools)}>
-        <p className={joinArgs(toolbarStyles.iconWrapper)}>
+        <button
+          className={joinArgs(toolbarStyles.iconWrapper)}
+          onClick={handleAdd}
+        >
           <PlusIcon
             width={24}
             height={24}
             className={joinArgs(toolbarStyles.icon)}
-            onClick={handleAdd}
           />
           Add bookmark
-        </p>
-        <p className={joinArgs(toolbarStyles.iconWrapper)}>
+        </button>
+        <button
+          className={joinArgs(toolbarStyles.iconWrapper)}
+          onClick={() => alert('Feature not implemented yet, coming soon.')}
+        >
           <DotsCircleHorizontalIcon
             width={24}
             height={24}
             className={joinArgs(toolbarStyles.icon)}
           />
           Sorting
-        </p>
+        </button>
       </div>
-      <Modal isOpen={showModal} />
+      {modalRef && (
+        <Modal open={showModal} ref={modalRef}>
+          {/*ugly, style it*/}
+          <p className='mb-8'>Create a new entry into {collection?.title} </p>
+          <Form>
+            <div className={joinArgs(formStyles.labelandInputWrapper)}>
+              <Form.Input type='text' placeholder=' ' name='url' />
+              <Form.Label htmlFor='url'>URL</Form.Label>
+            </div>
+            <Form.Button>Add</Form.Button>
+          </Form>
+        </Modal>
+      )}
     </div>
   );
-}
+};
 
+// <Form>
+// <Form.Input />
+// <Form.Label>URL</Form.Label>
+// </Form>
 export default Toolbar;

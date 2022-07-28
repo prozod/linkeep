@@ -1,6 +1,7 @@
 import express from 'express';
 import collectionController = require('../controllers/collectionController');
 import { authenticateToken } from '../middlewares/authMiddleware';
+import { checkJWT } from '../middlewares/checkJWT';
 const router = express.Router();
 
 // -------------------------------------
@@ -13,6 +14,9 @@ router.post('/', collectionController.CreateCollection);
 router.patch('/', collectionController.UpdateCollectionItems);
 
 // QUERY USER COLLECTIONS
-router.get('/', authenticateToken, collectionController.GetUserCollectionItems);
+router.get('/', checkJWT, collectionController.GetUserCollections);
+
+// QUERY USER COLLECTION BY ID
+router.get('/:id', checkJWT, collectionController.GetUserCollectionById);
 
 module.exports = router;

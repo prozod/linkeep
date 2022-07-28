@@ -1,6 +1,6 @@
 import { Navigation } from '@components/Navigation';
 import { Spinner } from '@components/Spinner';
-import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
+import useVerifyAuthToken from '@hooks/useVerifyAuthToken';
 import joinArgs from '@utils/joinArgs';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ const Auth = () => {
       <Navigation />
       <div className={joinArgs(authStyles.body)}>
         {isLogged ? (
-          <Spinner text="Hold on, we're getting your data..." />
+          <Spinner.Ball text="Hold on, we're getting your data..." />
         ) : (
           <div className={joinArgs(authStyles.greetingmodal_wrapper)}>
             <h1 className={joinArgs(authStyles.greetingmodal_wrapper_title)}>

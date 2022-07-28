@@ -1,2 +1,3 @@
 import Form from './form.component';
-export { Form };
+import { formStyles } from './form.styles';
+export { Form, formStyles };

@@ -1,22 +1,11 @@
 import { Button, buttonAnimations, buttonStyles } from '@components/Button';
 import { Navigation } from '@components/Navigation';
-import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
 import joinArgs from '@utils/joinArgs';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { homeStyles } from './home.styles';
 
 function Home() {
   const navigate = useNavigate();
-  const token = useVerifyAuthToken();
-
-  useEffect(() => {
-    if (token.isSuccess && token?.data !== 'undefined') {
-      localStorage.setItem('access', token?.data?.access);
-    } else {
-      localStorage.removeItem('access');
-    }
-  }, [token]);
 
   return (
     <div className={joinArgs(homeStyles.hero)}>

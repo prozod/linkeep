@@ -6,8 +6,12 @@ import LogoLinkeep from '../../../assets/logo.svg';
 //icons + styling + motion
 import { navigationAnimation, navigationStyles } from './navigation.styles';
 import { useEffect, useState } from 'react';
-import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
-import { CogIcon, HomeIcon, LogoutIcon } from '@heroicons/react/solid';
+import {
+  CogIcon,
+  HomeIcon,
+  LogoutIcon,
+  ViewBoardsIcon,
+} from '@heroicons/react/solid';
 
 const { Wrapper, Items, Logo } = navigationStyles;
 
@@ -15,24 +19,11 @@ function Navigation() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const token = useVerifyAuthToken();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const localStorageToken = localStorage.getItem('access');
   useEffect(() => {
-    if (localStorage.getItem('access')) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-
-    if (token.isSuccess && token?.data !== 'undefined') {
-      localStorage.setItem('access', token?.data?.access);
-      setIsAuthenticated(true);
-    } else {
-      localStorage.removeItem('access');
-      setIsAuthenticated(false);
-    }
-  }, [token]);
+    localStorageToken !== null && setIsAuthenticated(true);
+  }, [localStorageToken]);
 
   const logout = () => {
     authServices.logoutUser();
@@ -51,7 +42,7 @@ function Navigation() {
             ALPHA VERSION
           </span>
         </div>
-        {pathname !== '/dashboard' ? (
+        {!pathname.startsWith('/dashboard') ? (
           <>
             <div className={joinArgs(Items)}>
               <Link
@@ -97,7 +88,7 @@ function Navigation() {
             <div className={joinArgs(Items)}>
               {!isAuthenticated && (
                 <Link
-                  to='auth/register'
+                  to='/auth/register'
                   className={joinArgs([
                     'bg-transparent  border-[0.5px] border-white  text-sm rounded-lg py-2 px-4 hover:scale-95 transition-all hover:bg-white hover:text-slate-900',
                   ])}
@@ -107,13 +98,24 @@ function Navigation() {
               )}
               {!isAuthenticated && (
                 <Link
-                  to='auth/login'
+                  to='/auth/login'
                   className={joinArgs([
                     navigationAnimation.Item,
                     navigationStyles.Item,
                   ])}
                 >
                   Log in
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link
+                  to='/account'
+                  className={joinArgs([
+                    navigationAnimation.Item,
+                    navigationStyles.Item,
+                  ])}
+                >
+                  Account
                 </Link>
               )}
               {isAuthenticated && (
@@ -140,6 +142,15 @@ function Navigation() {
               ])}
             >
               <HomeIcon width={20} height={20} />
+            </Link>
+            <Link
+              to='/dashboard'
+              className={joinArgs([
+                navigationAnimation.Logo,
+                navigationStyles.Icons,
+              ])}
+            >
+              <ViewBoardsIcon width={20} height={20} />
             </Link>
             <Link
               to='/account'

@@ -1,26 +1,17 @@
-import { Form } from '@components/Form';
+import { Form, formStyles } from '@components/Form';
 import { Navigation } from '@components/Navigation';
+import { Spinner } from '@components/Spinner';
 import useAuth from '@hooks/useAuth';
 import joinArgs from '@utils/joinArgs';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserServicesType } from 'types/dataTypes';
 import { loginStyles } from './login.styles';
-
-type Login = {
-  email: string;
-  password: string;
-};
-
-type Register = {
-  email: string;
-  password: string;
-  confirmpassword: string;
-};
-
-export type ServicesType = Login | Register;
+import LogoLinkeep from '../../../assets/logo.svg';
 
 const Login = () => {
-  const [inputData, setInputData] = useState<ServicesType>({
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputData, setInputData] = useState<UserServicesType>({
     email: '',
     password: '',
   });
@@ -31,6 +22,7 @@ const Login = () => {
 
   const onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('loginFormData:', { ...inputData });
     mutation.mutate({ ...inputData });
 
     //todo move the input data out, so that when the email exists but password is incorrect, only remove password.
@@ -38,7 +30,10 @@ const Login = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData({ ...inputData, [e.target.name]: e.target.value });
+    setInputData({
+      ...inputData,
+      [e.currentTarget.name]: e.currentTarget.value,
+    });
   };
 
   useEffect(() => {
@@ -52,15 +47,73 @@ const Login = () => {
     <div className={joinArgs(loginStyles.wrapper)}>
       <Navigation />
       <div className={joinArgs(loginStyles.body)}>
-        <Form
-          onSubmit={onSubmit}
-          onChange={onChange}
-          data={inputData}
-          text={' Please log in below to continue '}
-          ctaText={'Log In'}
-          type='login'
-        />
-        {mutation.isLoading ? 'Loading user data...' : null}
+        {mutation.isLoading ? (
+          <Spinner.ThreeDots />
+        ) : (
+          <Form onSubmit={onSubmit}>
+            <div className={joinArgs(formStyles.headerWrapper)}>
+              <h1 className={joinArgs(formStyles.headerTitle)}>
+                <img
+                  src={LogoLinkeep}
+                  width={24}
+                  height={24}
+                  className='mr-2'
+                />
+                Linkeep
+              </h1>
+              <p className={joinArgs(formStyles.headerParagraph)}>
+                Please log in below to continue
+              </p>
+            </div>
+            <div className={joinArgs(formStyles.labelandInputWrapper)}>
+              <Form.Input
+                onChange={onChange}
+                type='email'
+                name='email'
+                placeholder=' '
+                value={inputData.email}
+                required
+              />
+              <Form.Label htmlFor='email'>Email address</Form.Label>
+            </div>
+            <div className={joinArgs(formStyles.labelandInputWrapper)}>
+              <Form.Input
+                onChange={onChange}
+                type={showPassword ? 'text' : 'password'}
+                name='password'
+                id='password'
+                value={inputData.password}
+                className={joinArgs(formStyles.inputPassword)}
+                placeholder=' '
+                required
+              />
+              <Form.Label htmlFor='password'>Password</Form.Label>
+              <span
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowPassword(!showPassword);
+                }}
+                className={
+                  showPassword
+                    ? joinArgs(formStyles.showPasswordButtonActive)
+                    : joinArgs(formStyles.showPasswordButtonInactive)
+                }
+              >
+                {showPassword ? 'hide' : 'show'}
+              </span>
+            </div>
+            <Form.Button type='submit'>Log In</Form.Button>
+            <div className={joinArgs(formStyles.formSuggestion)}>
+              or
+              <Link
+                to='/auth/register'
+                className={joinArgs(formStyles.formAltSuggestion)}
+              >
+                Create a new account now
+              </Link>
+            </div>
+          </Form>
+        )}
         {mutation.isSuccess ? <div>{mutation.data.message}</div> : null}
         {mutation.isError ? <div>{mutation.error}</div> : null}
       </div>

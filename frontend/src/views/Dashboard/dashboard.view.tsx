@@ -1,60 +1,48 @@
 import { Card } from '@components/Card';
 import { Navigation } from '@components/Navigation';
 import { Sidebar } from '@components/Sidebar';
-import { useVerifyAuthToken } from '@hooks/useVerifyAuthToken';
 import joinArgs from '@utils/joinArgs';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { dashboardStyles } from './dashboard.styles';
-import collectionDat from '../../components/Card/data.json';
 import { Toolbar } from '@components/Toolbar';
+import useCollection from '@hooks/useCollection';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Board } from '@components/Board';
 
 const Dashboard = () => {
-  const { isSuccess, isLoading, isError, data } = useVerifyAuthToken();
+  const queryParamsId = useLocation().pathname.split('/')[3]?.trim();
+  //TODO: this useCollection hook gets called even when you access /dashboard, even though it should only be implemented to fire when theres a queryParam
+  // doesnt break the code, but it throws an error in server console + clientside console + unneccessary network requests
+  const collection = useCollection('getById', queryParamsId);
   const navigate = useNavigate();
+  const localStorageToken = localStorage.getItem('access');
 
   useEffect(() => {
-    const token = localStorage.getItem('access');
-    console.log('checking for auth token');
-    if (!token) {
-      console.log('NOT ALLOWED');
-      navigate('/');
-    }
-  }, [data]);
-
-  console.log(data.user);
+    localStorageToken === null && navigate('/');
+  }, [localStorageToken]);
 
   return (
     <div className={joinArgs(dashboardStyles.wrapper)}>
       <Navigation />
       <div className={joinArgs(dashboardStyles.body)}>
-        {isLoading && <span>Loading...</span>}
-
-        {isError && <span>There was an error.</span>}
-        {isSuccess && (
-          <>
-            <Sidebar />
-            <div className={joinArgs(dashboardStyles.content)}>
-              <Toolbar />
-              {collectionDat && (
-                <h1 className='pt-2 pb-4 text-lg'>
-                  Viewing items from the&nbsp;
-                  <span className='font-bold'>
-                    {collectionDat.collection}
-                  </span>{' '}
-                  collection
-                </h1>
-              )}
-              <div className='flex flex-wrap items-center gap-2 lg:gap-4 transition-all'>
-                {collectionDat
-                  ? collectionDat.items.map((data) => {
-                      return <Card key={data} url={data} />;
-                    })
-                  : null}
-              </div>
-            </div>
-          </>
-        )}
+        <Sidebar />
+        <div className={joinArgs(dashboardStyles.content)}>
+          {collection?.isSuccess ? (
+            <Board key={collection?.data.id}>
+              <Toolbar collection={collection?.data} />
+              <Board.Title>
+                <p>{collection?.data?.title}</p>
+              </Board.Title>
+              <Card.Wrapper>
+                {collection?.data.items.map((item) => {
+                  return <Card key={item} url={item} />;
+                })}
+              </Card.Wrapper>
+            </Board>
+          ) : (
+            <Board.Empty />
+          )}
+        </div>
       </div>
     </div>
   );

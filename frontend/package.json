@@ -11,6 +11,8 @@
   "dependencies": {
     "@dhaiwat10/react-link-preview": "^1.14.2",
     "@heroicons/react": "^1.0.6",
+    "buffer": "^6.0.3",
+    "moment": "^2.29.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-query": "^3.39.1",

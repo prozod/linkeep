@@ -49,3 +49,26 @@ export const QueryUserCollection = async (ownerId: string) => {
   });
   return query;
 };
+
+export const QueryUserCollectionById = async (
+  ownerId: string,
+  collectionId: string
+) => {
+  try {
+    const query = await prisma.collection.findFirst({
+      where: {
+        ownerId: ownerId,
+        id: collectionId,
+      },
+    });
+    if (query == null) {
+      throw new Error(
+        "Unable to get collection, make sure you're logged in or the collection exists."
+      );
+    } else {
+      return query;
+    }
+  } catch (e) {
+    console.log('QueryUserCollectionById', e);
+  }
+};
