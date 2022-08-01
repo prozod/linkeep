@@ -41,15 +41,22 @@ const authServices = {
   },
 
   checkAuthToken: async function () {
-    const res = await fetch(`${url}/token`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const resData = res.json();
-    return resData;
+    try {
+      const res = await fetch(`${url}/token`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const resData = await res.json();
+      if (resData.issues) {
+        throw new Error('Something went wrong when refreshing the auth token.');
+      }
+      return resData;
+    } catch (e: unknown) {
+      console.error(e);
+    }
   },
 };
 

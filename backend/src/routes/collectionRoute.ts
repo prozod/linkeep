@@ -1,22 +1,36 @@
 import express from 'express';
 import collectionController = require('../controllers/collectionController');
-import { authenticateToken } from '../middlewares/authMiddleware';
-import { checkJWT } from '../middlewares/checkJWT';
+import { validateExistingJWT } from '../middlewares/jwt.guard';
 const router = express.Router();
 
 // -------------------------------------
 // ---------- COLLECTION QUERIES -------------
 
 // CREATE A NEW COLLECTION
-router.post('/', collectionController.CreateCollection);
+router.post('/', validateExistingJWT, collectionController.CreateCollection);
+//
+// DELETE AN ITEM
+router.delete(
+  '/',
+  validateExistingJWT,
+  collectionController.DeleteCollectionItem
+);
 
 // UPDATE A COLLECTION ITEMS
-router.patch('/', collectionController.UpdateCollectionItems);
+router.post(
+  '/item',
+  validateExistingJWT,
+  collectionController.CreateNewCollectionItem
+);
 
 // QUERY USER COLLECTIONS
-router.get('/', checkJWT, collectionController.GetUserCollections);
+router.get('/', validateExistingJWT, collectionController.GetUserCollections);
 
 // QUERY USER COLLECTION BY ID
-router.get('/:id', checkJWT, collectionController.GetUserCollectionById);
+router.get(
+  '/:id',
+  validateExistingJWT,
+  collectionController.GetUserCollectionById
+);
 
 module.exports = router;

@@ -37,7 +37,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem('access', JSON.stringify(mutation?.data?.access));
+    localStorage.setItem('isAuthenticated', 'true');
     {
       userExists && navigate('/dashboard');
     }
@@ -102,6 +102,11 @@ const Login = () => {
                 {showPassword ? 'hide' : 'show'}
               </span>
             </div>
+            {mutation?.data?.message ? (
+              <div className={joinArgs(loginStyles.error)}>
+                {mutation?.data.message}
+              </div>
+            ) : null}
             <Form.Button type='submit'>Log In</Form.Button>
             <div className={joinArgs(formStyles.formSuggestion)}>
               or
@@ -114,8 +119,6 @@ const Login = () => {
             </div>
           </Form>
         )}
-        {mutation.isSuccess ? <div>{mutation.data.message}</div> : null}
-        {mutation.isError ? <div>{mutation.error}</div> : null}
       </div>
     </div>
   );

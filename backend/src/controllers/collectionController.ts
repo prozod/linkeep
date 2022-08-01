@@ -1,5 +1,6 @@
 import collectionService = require('../services/collectionService');
 import { Request, Response } from 'express';
+import { z } from 'zod';
 
 //@CREATE NEW COLLECTION
 export const CreateCollection = async (req: Request, res: Response) => {
@@ -10,34 +11,57 @@ export const CreateCollection = async (req: Request, res: Response) => {
   res.json(await query);
 };
 
-//@UPDATE COLLECTION
-export const UpdateCollectionItems = async (req: Request, res: Response) => {
-  const query = collectionService.UpdateCollectionItems(
-    req.body.id,
-    req.body.item
-  );
-  res.json(await query);
+//@CREATE NEW COLLECTION ITEM
+export const CreateNewCollectionItem = async (req: Request, res: Response) => {
+  // really need to add f**kin' types to this. spent 30mins to debug because i passed wrong req param.
+  try {
+    const query = collectionService.CreateNewCollectionItem(
+      req.body.collectionId,
+      req.body.url
+    );
+    res.json(await query);
+  } catch (e) {
+    console.log('CollectionItems:', e);
+  }
+};
+
+//@DELETE COLLECTION ITEM
+export const DeleteCollectionItem = async (req: Request, res: Response) => {
+  // really need to add f**kin' types to this. spent 30mins to debug because i passed wrong req param.
+  try {
+    const query = collectionService.DeleteCollectionItem(req.body.id);
+    res.json(await query);
+  } catch (e) {
+    console.log('DeletedItems Error', e);
+  }
 };
 
 //@GET USER COLLECTION
-export const GetUserCollections = async (req: Request, res: Response) => {
-  console.log('body from getUser', req.body);
+//[temp fixed] this fails because previously we were passing the userid from the req.body checkJWT token but now its empty
 
-  const query = collectionService.QueryUserCollection(req.body.id);
-  res.json(await query);
+const RequestBodyTypeGuard = z.object({
+  id: z.string().min(6),
+});
+
+export const GetUserCollections = async (req: Request, res: Response) => {
+  const parsedRequestBody = RequestBodyTypeGuard.safeParse(req.body);
+  if (parsedRequestBody.success) {
+    const query = collectionService.QueryUserCollection(req.body.id);
+    res.json(await query);
+  } else {
+    res.status(400).send({ ...parsedRequestBody.error });
+  }
 };
 
 //@GET USER COLLECTION BY ID
 export const GetUserCollectionById = async (req: Request, res: Response) => {
-  console.log('body from getUserById', req.body);
   try {
     const query = collectionService.QueryUserCollectionById(
       req.body.id,
       req.params.id
     );
-    console.log('QUERYBYID REQUESTS', req.body.id, req.params.id);
     res.json(await query);
   } catch (e) {
-    console.log('ColByIdError:', e);
+    console.log('GetUserCollectionById:', e);
   }
 };

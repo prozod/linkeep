@@ -1,7 +1,8 @@
 import { Spinner } from '@components/Spinner';
 import { PlusIcon } from '@heroicons/react/outline';
 import { FolderIcon } from '@heroicons/react/solid';
-import useCollection from '@hooks/useCollection';
+import { useCollectionQuery } from '@hooks/useCollection';
+import useCookieAccessData from '@hooks/useCookieAccessData';
 import joinArgs from '@utils/joinArgs';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { sidebarAnimation, sidebarStyles } from './sidebar.styles';
@@ -13,14 +14,14 @@ interface ISidebarItem {
 }
 
 export default function Sidebar() {
-  const collections = useCollection('get');
+  const user = useCookieAccessData({ cookie: 'access', idx: 1 });
+  const collections = useCollectionQuery('get');
   const navigate = useNavigate();
 
   const navigateToCollection = (e: React.MouseEvent<HTMLButtonElement>) => {
     const id = e.currentTarget.dataset.id;
     navigate(`collection/${id}`);
   };
-
   return (
     <div className={joinArgs(sidebarStyles.defaults)}>
       <div className={joinArgs(sidebarStyles.title)}>
@@ -36,7 +37,12 @@ export default function Sidebar() {
       </div>
       <div className={joinArgs(sidebarStyles.line)}></div>
       <section>
-        {collections?.data ? (
+        {collections?.isLoading && (
+          <div className={joinArgs(sidebarStyles.spinnerContainer)}>
+            <Spinner.ThreeDots />
+          </div>
+        )}
+        {collections?.data !== undefined && collections?.data?.length > 0 ? (
           collections?.data.map((item) => {
             return (
               <Sidebar.Item
@@ -48,8 +54,8 @@ export default function Sidebar() {
             );
           })
         ) : (
-          <div className={joinArgs(sidebarStyles.spinnerContainer)}>
-            <Spinner.ThreeDots />
+          <div className='text-center py-4 text-slate-600 text-sm'>
+            <p>No collections available</p>
           </div>
         )}
       </section>

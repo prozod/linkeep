@@ -4,21 +4,23 @@ import { Sidebar } from '@components/Sidebar';
 import joinArgs from '@utils/joinArgs';
 import { dashboardStyles } from './dashboard.styles';
 import { Toolbar } from '@components/Toolbar';
-import useCollection from '@hooks/useCollection';
+import { useCollectionQuery } from '@hooks/useCollection';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Board } from '@components/Board';
+import { isUserAuthenticated } from 'App';
 
 const Dashboard = () => {
   const queryParamsId = useLocation().pathname.split('/')[3]?.trim();
   //TODO: this useCollection hook gets called even when you access /dashboard, even though it should only be implemented to fire when theres a queryParam
   // doesnt break the code, but it throws an error in server console + clientside console + unneccessary network requests
-  const collection = useCollection('getById', queryParamsId);
+  const collection = useCollectionQuery('getById', queryParamsId);
   const navigate = useNavigate();
-  const localStorageToken = localStorage.getItem('access');
+  const localStorageToken = localStorage.getItem('isAuthenticated');
 
   useEffect(() => {
-    localStorageToken === null && navigate('/');
+    console.log(isUserAuthenticated());
+    !isUserAuthenticated() && navigate('/');
   }, [localStorageToken]);
 
   return (
@@ -35,7 +37,7 @@ const Dashboard = () => {
               </Board.Title>
               <Card.Wrapper>
                 {collection?.data.items.map((item) => {
-                  return <Card key={item} url={item} />;
+                  return <Card key={item.id} {...item} />;
                 })}
               </Card.Wrapper>
             </Board>

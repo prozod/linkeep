@@ -1,50 +1,28 @@
+import { queryClient } from 'main';
 import { useMutation, useQuery } from 'react-query';
-import { ICollectionDataResponse } from 'types/dataTypes';
+import { ICollectionDataResponse, ICollectionItem } from 'types/dataTypes';
 const url = 'http://localhost:5000';
 
-interface Action {
-  update: null;
-  delete: null;
-  create: null;
+interface QueryActionType {
   get: ICollectionDataResponse[];
   getById: ICollectionDataResponse;
 }
 
-const collectionServices = {
-  updateCollection: async function <T>(data: T) {
-    const res = await fetch(`${url}/collection`, {
-      method: 'POST',
-      // credentials: 'same-origin',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const resData = res.json();
-    return resData;
-  },
+interface MutationActionType {
+  update: ICollectionDataResponse;
+  delete: null;
+  create: null;
+}
 
-  createCollection: async function <T>(data: T) {
-    const res = await fetch(`${url}/users/register`, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const resData = res.json();
-    return resData;
-  },
-};
-
-const useCollection = <T extends keyof Action>(action: T, id?: string) => {
+const useCollectionQuery = <T extends keyof QueryActionType>(
+  action: T,
+  id?: string
+) => {
   switch (action) {
     case 'get':
       return useQuery(
         'getCollections',
-        async (): Promise<Action[typeof action]> => {
+        async (): Promise<QueryActionType[typeof action]> => {
           try {
             const res = await fetch(`${url}/collection`, {
               method: 'GET',
@@ -63,10 +41,11 @@ const useCollection = <T extends keyof Action>(action: T, id?: string) => {
           }
         }
       );
+
     case 'getById':
       return useQuery(
         ['getCollectionById', id],
-        async (): Promise<Action[typeof action]> => {
+        async (): Promise<QueryActionType[typeof action]> => {
           try {
             const res = await fetch(`${url}/collection/${id}`, {
               method: 'GET',
@@ -87,4 +66,101 @@ const useCollection = <T extends keyof Action>(action: T, id?: string) => {
       );
   }
 };
-export default useCollection;
+
+const useCollectionMutation = <T extends keyof MutationActionType>(
+  action: T
+) => {
+  switch (action) {
+    case 'update':
+      return useMutation(
+        async (
+          data: Pick<ICollectionItem, 'collectionId' | 'url'>
+        ): Promise<MutationActionType[typeof action]> => {
+          try {
+            const res = await fetch(`${url}/collection/item`, {
+              method: 'POST',
+              // credentials: 'same-origin',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            });
+            const resData = res.json();
+            return resData;
+          } catch (e: unknown) {
+            throw new Error(
+              'An error occured when updating the collection',
+              e as ErrorOptions
+            );
+          }
+        },
+
+        {
+          onMutate: async (data: ICollectionItem) => {
+            await queryClient.cancelQueries([
+              'getCollectionById',
+              `${data.collectionId}`,
+            ]);
+            const prevUrlCollection =
+              queryClient.getQueryData<ICollectionDataResponse>([
+                'getCollectionById',
+                `${data.collectionId}`,
+              ]);
+
+            if (prevUrlCollection) {
+              queryClient.setQueryData<ICollectionDataResponse>(
+                ['getCollectionById', `${data.collectionId}`],
+                {
+                  ...prevUrlCollection,
+                  items: [...prevUrlCollection.items, data],
+                }
+              );
+            }
+
+            return { prevUrlCollection };
+          },
+          onError: (_err, _variables, context) => {
+            if (context?.prevUrlCollection) {
+              queryClient.setQueryData<ICollectionDataResponse>(
+                ['getCollectionById', `${context.prevUrlCollection.id}`],
+                context?.prevUrlCollection
+              );
+            }
+          },
+          onSettled: (data) => {
+            queryClient.invalidateQueries<ICollectionDataResponse>([
+              'getCollectionById',
+              `${data?.id}`,
+            ]);
+          },
+        }
+      );
+    case 'delete':
+      return useMutation(
+        async (
+          data: ICollectionItem
+        ): Promise<MutationActionType[typeof action]> => {
+          try {
+            const res = await fetch(`${url}/collection`, {
+              method: 'DELETE',
+              // credentials: 'same-origin',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            });
+            const resData = res.json();
+            return resData;
+          } catch (e: unknown) {
+            throw new Error(
+              'An error occured when updating the collection',
+              e as ErrorOptions
+            );
+          }
+        }
+      );
+  }
+};
+export { useCollectionQuery, useCollectionMutation };

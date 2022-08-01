@@ -11,10 +11,16 @@ type Register = {
 
 export type UserServicesType = Login | Register;
 
+export interface ICollectionItem {
+  id: string;
+  url: string;
+  collectionId: string;
+}
+
 export interface ICollectionDataResponse {
   id: string;
   createdAt: string | Date;
-  items: string[];
+  items: ICollectionItem[];
   ownerId: string;
   title: string;
   updatedAt: string | Date;

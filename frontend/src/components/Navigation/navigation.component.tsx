@@ -12,22 +12,26 @@ import {
   LogoutIcon,
   ViewBoardsIcon,
 } from '@heroicons/react/solid';
+import { isUserAuthenticated } from 'App';
 
 const { Wrapper, Items, Logo } = navigationStyles;
 
 function Navigation() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const localStorageToken = localStorage.getItem('access');
+
   useEffect(() => {
-    localStorageToken !== null && setIsAuthenticated(true);
-  }, [localStorageToken]);
+    if (isUserAuthenticated()) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   const logout = () => {
     authServices.logoutUser();
-    localStorage.removeItem('access');
+    localStorage.removeItem('isAuthenticated');
     navigate('/');
     location.reload();
   };

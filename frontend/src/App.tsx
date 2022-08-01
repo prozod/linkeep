@@ -1,25 +1,22 @@
 //state and fetching
-import useVerifyAuthToken from '@hooks/useVerifyAuthToken';
-import { useEffect } from 'react';
+import useCookieAccessData from '@hooks/useCookieAccessData';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Outlet } from 'react-router-dom';
 
+export function isUserAuthenticated() {
+  const localStorageAuthItem = localStorage.getItem('isAuthenticated');
+  return localStorageAuthItem === undefined || localStorageAuthItem === null
+    ? false
+    : true;
+}
+
 function App() {
-  const token = useVerifyAuthToken();
-
-  useEffect(() => {
-    if (token.isSuccess && token?.data !== 'undefined') {
-      localStorage.setItem('access', token?.data?.access);
-    } else {
-      localStorage.removeItem('access');
-    }
-  }, [token]);
-
+  useCookieAccessData({ cookie: 'access', idx: 1 });
   return (
     <>
       <Outlet />
       {
-        // <ReactQueryDevtools initialIsOpen />
+        //<ReactQueryDevtools initialIsOpen />
       }
     </>
   );

@@ -1,6 +1,6 @@
 export const formStyles = {
   defaults: [
-    'p-8 py-12 flex justify-center flex-col w-[fit-content] bg-slate-800 shadow-lg rounded-lg border-[1px] border-indigo-400',
+    'p-8 py-12 flex justify-center flex-col w-[fit-content] max-w-lg bg-slate-800 shadow-lg rounded-lg border-[1px] border-indigo-400',
   ],
   labelandInputWrapper: [
     'relative z-0 w-full min-w-[20vw] mb-6 group flex items-center',

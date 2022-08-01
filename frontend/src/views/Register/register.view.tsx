@@ -17,7 +17,6 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
-
   const mutation = useAuth('register');
   const userExists = mutation.isSuccess && mutation.data.id !== undefined;
 
@@ -36,7 +35,7 @@ const Register = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem('access', JSON.stringify(mutation?.data?.access));
+    localStorage.setItem('isAuthenticated', 'true');
     {
       userExists && navigate('/dashboard');
     }

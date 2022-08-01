@@ -5,6 +5,8 @@ import {
   hashPassword,
 } from '../middlewares/hashingMiddleware';
 import { generateAccessToken, generateRefreshToken } from '../utils/tokenUtils';
+import { z } from 'zod';
+import { UserTokenInfoDTO, UserAuthRequestModel } from '../models/auth.dto';
 require('dotenv').config();
 
 //@QUERY ALL USERS
@@ -39,60 +41,59 @@ export const DeleteUser = async (req: Request, res: Response) => {
 //@DE-AUTHENTICATE USER
 export const DeauthenticateUser = async (req: Request, res: Response) => {
   res.clearCookie('refresh');
+  res.clearCookie('access');
   res.status(200).send({ message: 'User logged out successfully' });
 };
 
 //@AUTHENTICATE USER
 export const AuthenticateUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const query = usersService.LoginUser(email);
-  const result = await query;
+  if (UserAuthRequestModel.safeParse(req.body)) {
+    // kinda redundant? because password match below and prisma responses deal with this check (sort of, except pw length)
+    const query = usersService.LoginUser(req.body.email);
+    const response = await query;
 
-  // compare client side input password with hashed password from database
-  const passwordMatch = await comparePassword(
-    password,
-    String(result?.password)
-  );
-
-  if (result === null) {
-    console.log("User doesn't exist in our database.");
-    res.status(401).send({
-      message: "User doesn't exist in our database.",
-    });
-  } else if (passwordMatch) {
-    const user = {
-      id: result?.id,
-      name: result?.name,
-      email: result?.email,
-    };
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
-    res.cookie('refresh', refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      // secure: true, //localhost is http
-    });
-    res.cookie('access', accessToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      // secure: true, //localhost is http
-    });
-    console.log('usersController Login', {
-      ...user,
-      access: accessToken,
-      refresh: refreshToken,
-    });
-    res
-      .status(200)
-      .send({ ...user, access: accessToken, refresh: refreshToken });
-  } else {
-    console.log(
-      "There was an error fetching the user you're looking for, please make sure the credentials are correct."
+    // compare client side input password with hashed password from database
+    const passwordMatch = await comparePassword(
+      req.body.password,
+      String(response?.password)
     );
-    res.status(401).send({
+
+    if (response === null) {
+      res.status(400).send({
+        message: `Email address ${req.body.email} doesn't seem to be registered to any account.`,
+      });
+    } else if (passwordMatch && response !== undefined) {
+      const user: UserTokenInfoDTO = {
+        id: response.id,
+        name: response.name,
+        email: response.email,
+      };
+
+      const accessToken = generateAccessToken(user);
+      const refreshToken = generateRefreshToken(user);
+
+      res.cookie('refresh', refreshToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        // secure: true, //localhost is http
+      });
+      res.cookie('access', accessToken, {
+        // httpOnly: true,
+        sameSite: 'strict',
+        // secure: true, //localhost is http
+      });
+
+      res.status(200).send({ ...user, access: accessToken });
+    } else {
+      res.status(400).send({
+        message:
+          "There was an error fetching the user you're looking for, please make sure the credentials are correct.",
+      });
+    }
+  } else {
+    res.status(400).send({
       message:
-        "There was an error fetching the user you're looking for, please make sure the credentials are correct.",
+        'Bad login data. Email and password are in an incorrect data type.',
     });
   }
 };
