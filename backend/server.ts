@@ -3,22 +3,31 @@ import { Request, Response } from 'express';
 require('dotenv').config();
 
 const PORT = process.env.PORT;
-const app = createApp('');
+export const app = createApp('', {
+  socket: {
+    host: process.env.REDIS_HOST as string,
+    port: Number(process.env.REDIS_PORT),
+  },
+  password: process.env.REDIS_PASSWORD as string,
+});
 
-app.get('/', (req: Request, res: Response) => {
+app.expressClient.get('/', (req: Request, res: Response) => {
   res.send('express app');
 });
 
 // ROUTES
 const usersRoute = require('./src/routes/usersRoute');
-app.use('/users', usersRoute);
+app.expressClient.use('/users', usersRoute);
 
 const tokenRoute = require('./src/routes/tokenRoute');
-app.use('/token', tokenRoute);
+app.expressClient.use('/token', tokenRoute);
 
 const collectionRoute = require('./src/routes/collectionRoute');
-app.use('/collection', collectionRoute);
+app.expressClient.use('/collection', collectionRoute);
 
-app.listen(PORT, () => {
+const scrapeRoute = require('./src/routes/scrapeRoute');
+app.expressClient.use('/scrape', scrapeRoute);
+
+app.expressClient.listen(PORT, () => {
   console.log(`Express server listening on port: ${PORT}`);
 });

@@ -1,55 +1,99 @@
-import joinArgs from "@utils/joinArgs";
-import { LinkPreview } from "@dhaiwat10/react-link-preview";
-import { cardStyles } from "./card.styles";
-import { XCircleIcon } from "@heroicons/react/solid";
-import { useState } from "react";
-import { useCollectionMutation } from "@hooks/useCollection";
-import { ICollectionItem } from "types/dataTypes";
+import joinArgs from '@utils/joinArgs';
+import { LinkPreview } from '@dhaiwat10/react-link-preview';
+import { cardStyles } from './card.styles';
+import { XCircleIcon } from '@heroicons/react/solid';
+import { useState } from 'react';
+import { ICollectionItem, ScrapeAPIRes } from 'types/dataTypes';
+import { useItemMutation } from '@hooks/useItem';
+import { useQuery } from 'react-query';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 function Card(item: ICollectionItem) {
   const [isHovering, setIsHovering] = useState(false);
-  const mutation = useCollectionMutation("delete");
+  const mutation = useItemMutation('delete');
+
+  const query = useQuery(
+    [`scrapeUrl, ${item.url}`],
+    async (): Promise<ScrapeAPIRes> => {
+      const res = await fetch(`http://localhost:5000/scrape?url=${item.url}`);
+      const data = await res.json();
+      return data;
+    }
+  );
 
   return (
-    <div
-      className={joinArgs(cardStyles.container)}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      {isHovering && (
-        <XCircleIcon
-          width={36}
-          height={36}
-          className="absolute shadow-lg z-10 right-[-10px] bottom-[-10px] text-indigo-500 animate-pulse transition-all hover:animate-none"
-          onClick={() => {
-            console.log(item?.id);
-            mutation?.mutate({
-              id: item?.id,
-              collectionId: item?.collectionId,
-              url: item?.url,
-            });
-          }}
-        />
+    <>
+      {query.isLoading && (
+        <div className={joinArgs(cardStyles.skeleton_wrapper)}>
+          <div className={joinArgs(cardStyles.skeleton_image)}></div>
+          <div className={joinArgs(cardStyles.skeleton_info)}>
+            <div className={joinArgs(cardStyles.skeleton_title)}></div>
+            <div className={joinArgs(cardStyles.skeleton_text)}></div>
+            <div className={joinArgs(cardStyles.skeleton_text)}></div>
+          </div>
+        </div>
       )}
-      <LinkPreview
-        url={item.url}
-        width={300}
-        height={250}
-        imageHeight={150}
-        primaryTextColor="#ffffff"
-        secondaryTextColor="#64748b"
-        descriptionLength={75}
-        showPlaceholderIfNoImage
-        openInNewTab
-        backgroundColor="#1e293b"
-        borderColor="#334155"
-      />
-    </div>
+      {query.isSuccess && (
+        <div
+          className={joinArgs(cardStyles.container)}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          {isHovering && (
+            <XCircleIcon
+              width={36}
+              height={36}
+              className='absolute shadow-lg z-10 right-[-10px] bottom-[-10px] text-indigo-500 animate-pulse transition-all hover:animate-none'
+              onClick={() => {
+                console.log(item?.id);
+                mutation?.mutate({
+                  id: item?.id,
+                  collectionId: item?.collectionId,
+                  url: item?.url,
+                });
+              }}
+            />
+          )}
+          <div
+            className={joinArgs(cardStyles.link_wrapper)}
+            onClick={() => window.open(`${query?.data?.og.url}`, '_blank')}
+          >
+            <div className={joinArgs(cardStyles.link_image_container)}>
+              <img
+                className={joinArgs(cardStyles.link_image)}
+                src={query?.data?.og.image.url}
+                alt={query?.data?.og.title}
+              />
+            </div>
+            <div className={joinArgs(cardStyles.link_info)}>
+              <h1 className={joinArgs(cardStyles.link_title)}>
+                {query?.data?.og.title}
+              </h1>
+              <p className={joinArgs(cardStyles.link_description)}>
+                {query?.data?.og.description}
+              </p>
+              <p className={joinArgs(cardStyles.link_url)}>
+                {query?.data?.og.url}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 export default Card;
 
-Card.Wrapper = function CardWrapper({ children }: { children: JSX.Element | React.ReactNode }) {
-  return <div className="flex flex-wrap items-center gap-2 lg:gap-4 transition-all">{children}</div>;
+Card.Wrapper = function CardWrapper({
+  children,
+}: {
+  children: JSX.Element | React.ReactNode;
+}) {
+  return (
+    <div className='flex flex-wrap items-center gap-2 lg:gap-4 transition-all'>
+      {children}
+    </div>
+  );
 };

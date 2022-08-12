@@ -1,6 +1,10 @@
 import { queryClient } from 'main';
 import { useMutation, useQuery } from 'react-query';
-import { ICollectionDataResponse, ICollectionItem } from 'types/dataTypes';
+import {
+  ICollection,
+  ICollectionDataResponse,
+  ICollectionItem,
+} from 'types/dataTypes';
 const url = 'http://localhost:5000';
 
 interface QueryActionType {
@@ -71,14 +75,14 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
   action: T
 ) => {
   switch (action) {
-    case 'update':
+    case 'delete':
       return useMutation(
         async (
-          data: Pick<ICollectionItem, 'collectionId' | 'url'>
+          data: Pick<ICollection, 'id'>
         ): Promise<MutationActionType[typeof action]> => {
           try {
-            const res = await fetch(`${url}/collection/item`, {
-              method: 'POST',
+            const res = await fetch(`${url}/collection`, {
+              method: 'DELETE',
               // credentials: 'same-origin',
               credentials: 'include',
               headers: {
@@ -95,27 +99,17 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
             );
           }
         },
-
         {
-          onMutate: async (data: ICollectionItem) => {
-            await queryClient.cancelQueries([
-              'getCollectionById',
-              `${data.collectionId}`,
-            ]);
+          onMutate: async (data: ICollection) => {
+            console.log('delete collection data:', data);
+            await queryClient.cancelQueries('getCollections');
             const prevUrlCollection =
-              queryClient.getQueryData<ICollectionDataResponse>([
-                'getCollectionById',
-                `${data.collectionId}`,
-              ]);
+              queryClient.getQueryData<ICollection[]>('getCollections');
 
             if (prevUrlCollection) {
-              queryClient.setQueryData<ICollectionDataResponse>(
-                ['getCollectionById', `${data.collectionId}`],
-                {
-                  ...prevUrlCollection,
-                  items: [...prevUrlCollection.items, data],
-                }
-              );
+              queryClient.setQueryData<ICollection>('getCollections', {
+                prevUrlCollection,
+              });
             }
 
             return { prevUrlCollection };
@@ -136,14 +130,14 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
           },
         }
       );
-    case 'delete':
+    case 'create':
       return useMutation(
         async (
-          data: ICollectionItem
+          data: Pick<ICollectionItem, 'title'>
         ): Promise<MutationActionType[typeof action]> => {
           try {
             const res = await fetch(`${url}/collection`, {
-              method: 'DELETE',
+              method: 'POST',
               // credentials: 'same-origin',
               credentials: 'include',
               headers: {
@@ -155,10 +149,37 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
             return resData;
           } catch (e: unknown) {
             throw new Error(
-              'An error occured when updating the collection',
+              'An error occured when creating a new collection',
               e as ErrorOptions
             );
           }
+        },
+        {
+          onMutate: async (data: ICollection) => {
+            await queryClient.cancelQueries('getCollections');
+            const prevUrlCollection =
+              queryClient.getQueryData<ICollection>('getCollections');
+
+            if (prevUrlCollection) {
+              queryClient.setQueryData<ICollection>('getCollections', {
+                ...prevUrlCollection,
+                ...data,
+              });
+            }
+
+            return { prevUrlCollection };
+          },
+          onError: (_err, _variables, context) => {
+            if (context?.prevUrlCollection) {
+              queryClient.setQueryData<ICollection>(
+                'getCollections',
+                context?.prevUrlCollection
+              );
+            }
+          },
+          onSettled: () => {
+            queryClient.invalidateQueries<ICollection>('getCollections');
+          },
         }
       );
   }

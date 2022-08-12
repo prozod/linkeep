@@ -30,6 +30,7 @@ const Login = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     setInputData({
       ...inputData,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -50,7 +51,10 @@ const Login = () => {
         {mutation.isLoading ? (
           <Spinner.ThreeDots />
         ) : (
-          <Form onSubmit={onSubmit}>
+          <Form
+            onSubmit={onSubmit}
+            className={joinArgs(formStyles.authFormDefaults)}
+          >
             <div className={joinArgs(formStyles.headerWrapper)}>
               <h1 className={joinArgs(formStyles.headerTitle)}>
                 <img

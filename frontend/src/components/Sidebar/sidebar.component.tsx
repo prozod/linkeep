@@ -1,9 +1,15 @@
+import { Form, formStyles } from '@components/Form';
+import { Modal } from '@components/Modal';
 import { Spinner } from '@components/Spinner';
 import { PlusIcon } from '@heroicons/react/outline';
 import { FolderIcon } from '@heroicons/react/solid';
-import { useCollectionQuery } from '@hooks/useCollection';
-import useCookieAccessData from '@hooks/useCookieAccessData';
+import {
+  useCollectionMutation,
+  useCollectionQuery,
+} from '@hooks/useCollection';
+import useComponentVisible from '@hooks/useComponentVisible';
 import joinArgs from '@utils/joinArgs';
+import { createRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { sidebarAnimation, sidebarStyles } from './sidebar.styles';
 
@@ -14,14 +20,27 @@ interface ISidebarItem {
 }
 
 export default function Sidebar() {
-  const user = useCookieAccessData({ cookie: 'access', idx: 1 });
   const collections = useCollectionQuery('get');
+  const mutation = useCollectionMutation('create');
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const modalRef = createRef<HTMLDivElement>();
+  const [newCollectionName, setNewCollectionName] = useState('');
+  useComponentVisible(modalRef, setShowModal);
 
   const navigateToCollection = (e: React.MouseEvent<HTMLButtonElement>) => {
     const id = e.currentTarget.dataset.id;
     navigate(`collection/${id}`);
   };
+
+  const onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    // creat mutation
+    e.preventDefault();
+    mutation?.mutate({ title: newCollectionName });
+    setNewCollectionName('');
+    setShowModal(false);
+  };
+
   return (
     <div className={joinArgs(sidebarStyles.defaults)}>
       <div className={joinArgs(sidebarStyles.title)}>
@@ -31,6 +50,7 @@ export default function Sidebar() {
             sidebarStyles.addIcon,
             sidebarAnimation.addIcon,
           ])}
+          onClick={() => setShowModal(true)}
         >
           <PlusIcon width={20} height={20} />
         </button>
@@ -59,6 +79,24 @@ export default function Sidebar() {
           </div>
         )}
       </section>
+      {
+        <Modal open={showModal} ref={modalRef}>
+          <Form onSubmit={onSubmit} className='flex-row'>
+            <div className={joinArgs([formStyles.labelandInputWrapper])}>
+              <Form.Input
+                type='text'
+                placeholder=' '
+                name='collectionname'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setNewCollectionName(e.currentTarget.value)
+                }
+              />
+              <Form.Label htmlFor='collectionname'>Collection name</Form.Label>
+            </div>
+            <Form.Button>Create</Form.Button>
+          </Form>
+        </Modal>
+      }
     </div>
   );
 }

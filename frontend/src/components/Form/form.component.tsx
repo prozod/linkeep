@@ -1,4 +1,5 @@
 import joinArgs from '@utils/joinArgs';
+import { useEffect, useRef } from 'react';
 import { formStyles } from './form.styles';
 
 const Form = (props: React.FormHTMLAttributes<HTMLFormElement>) => {
@@ -17,9 +18,16 @@ export default Form;
 Form.Input = function FormInput(
   props: React.InputHTMLAttributes<HTMLInputElement>
 ) {
+  const myRef = useRef<HTMLInputElement>(null);
+
+  // useEffect(() => {
+  //   myRef?.current?.focus();
+  // });
+
   return (
     <input
       {...props}
+      ref={myRef}
       className={joinArgs([formStyles.input, props?.className])}
     />
   );

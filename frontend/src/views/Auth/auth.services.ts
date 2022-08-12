@@ -16,19 +16,17 @@ const authServices = {
   },
 
   logoutUser: async function () {
-    const res = await fetch(`${url}/users/logout`, {
+    await fetch(`${url}/users/logout`, {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    const resData = res.json();
-    return resData;
   },
 
   registerUser: async function <T>(data: T) {
-    const res = await fetch(`${url}/users/register`, {
+    await fetch(`${url}/users/register`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -36,8 +34,6 @@ const authServices = {
       },
       body: JSON.stringify(data),
     });
-    const resData = res.json();
-    return resData;
   },
 
   checkAuthToken: async function () {
@@ -55,6 +51,7 @@ const authServices = {
       }
       return resData;
     } catch (e: unknown) {
+      localStorage.removeItem('isAuthenticated');
       console.error(e);
     }
   },

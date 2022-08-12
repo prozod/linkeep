@@ -1,6 +1,7 @@
 import collectionService = require('../services/collectionService');
 import { Request, Response } from 'express';
 import { z } from 'zod';
+import { app } from '../../server';
 
 //@CREATE NEW COLLECTION
 export const CreateCollection = async (req: Request, res: Response) => {
@@ -27,12 +28,24 @@ export const CreateNewCollectionItem = async (req: Request, res: Response) => {
 
 //@DELETE COLLECTION ITEM
 export const DeleteCollectionItem = async (req: Request, res: Response) => {
-  // really need to add f**kin' types to this. spent 30mins to debug because i passed wrong req param.
+  // really need to add  types to this. spent 30mins to debug because i passed wrong req param.
   try {
     const query = collectionService.DeleteCollectionItem(req.body.id);
+    app.redisClient.del(`${req.body.url}`);
     res.json(await query);
   } catch (e) {
     console.log('DeletedItems Error', e);
+  }
+};
+
+//@DELETE COLLECTION
+export const DeleteCollection = async (req: Request, res: Response) => {
+  // really need to add types to this. spent 30mins to debug because i passed wrong req param.
+  try {
+    const query = collectionService.DeleteCollection(req.body.id);
+    res.json(await query);
+  } catch (e) {
+    console.log('DeleteCollection Error', e);
   }
 };
 
@@ -41,6 +54,7 @@ export const DeleteCollectionItem = async (req: Request, res: Response) => {
 
 const RequestBodyTypeGuard = z.object({
   id: z.string().min(6),
+  email: z.string(),
 });
 
 export const GetUserCollections = async (req: Request, res: Response) => {

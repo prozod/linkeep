@@ -19,10 +19,10 @@ const Dashboard = () => {
   const localStorageToken = localStorage.getItem('isAuthenticated');
 
   useEffect(() => {
-    console.log(isUserAuthenticated());
     !isUserAuthenticated() && navigate('/');
   }, [localStorageToken]);
 
+  console.log();
   return (
     <div className={joinArgs(dashboardStyles.wrapper)}>
       <Navigation />

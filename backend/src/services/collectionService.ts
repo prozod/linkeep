@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
@@ -48,6 +47,8 @@ export const QueryUserCollection = async (ownerId: string) => {
   return query;
 };
 
+// Query a collection by id
+// Used to render individual collections on the page (collectionId is used as slug)
 export const QueryUserCollectionById = async (
   ownerId: string,
   collectionId: string
@@ -75,6 +76,7 @@ export const QueryUserCollectionById = async (
 };
 
 // Delete an item
+// Each item has an unique uuid, pass the id of the item to delete it.
 export const DeleteCollectionItem = async (id: string) => {
   try {
     const query = await prisma.item.delete({
@@ -85,5 +87,18 @@ export const DeleteCollectionItem = async (id: string) => {
     return query;
   } catch (e) {
     throw new Error('There was an error in the DeleteCollectionItem function.');
+  }
+};
+
+export const DeleteCollection = async (id: string) => {
+  try {
+    const query = await prisma.collection.delete({
+      where: {
+        id: id,
+      },
+    });
+    return query;
+  } catch (e) {
+    throw new Error('There was an error in the DeleteCollection function.');
   }
 };

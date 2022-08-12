@@ -33,7 +33,7 @@ export const validateExistingJWT = async (
             process.env.JWT_REFRESH_TOKEN,
             (err: unknown, data: UserTokenInfoDTO) => {
               if (err) {
-                return res.status(403).send({
+                return res.status(401).send({
                   message: 'Failed to generate new access token.',
                   error: err,
                 });
@@ -48,7 +48,7 @@ export const validateExistingJWT = async (
               res.cookie('access', newAccessToken, {
                 // httpOnly: true,
                 sameSite: 'strict',
-                maxAge: 15 * 1000,
+                maxAge: 900 * 1000,
                 // secure: true, //localhost is http
               });
 

@@ -27,13 +27,16 @@ const Modal = forwardRef(
     if (!element) {
       createWrapperAndAppendToBody(elementId);
     }
-
     return ReactDOM.createPortal(
       <div
         className={joinArgs(modalStyles.background)}
         data-id='modal-background'
       >
-        <div className={joinArgs(modalStyles.modal)} data-id='modal' ref={ref}>
+        <div
+          className={joinArgs(modalStyles.modalDefault)}
+          data-id='modal'
+          ref={ref}
+        >
           {children}
         </div>
       </div>,

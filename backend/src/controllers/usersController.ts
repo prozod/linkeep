@@ -1,11 +1,7 @@
 import usersService = require('../services/usersService');
 import { Request, Response } from 'express';
-import {
-  comparePassword,
-  hashPassword,
-} from '../middlewares/hashingMiddleware';
+import { comparePassword, hashPassword } from '../middlewares/hashing';
 import { generateAccessToken, generateRefreshToken } from '../utils/tokenUtils';
-import { z } from 'zod';
 import { UserTokenInfoDTO, UserAuthRequestModel } from '../models/auth.dto';
 require('dotenv').config();
 
@@ -26,7 +22,6 @@ export const QueryUser = async (req: Request, res: Response) => {
 export const CreateUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const hashed = await hashPassword(password);
-  console.log(hashed);
   const query = usersService.CreateNewUser(email, hashed);
   res.json(await query);
 };
@@ -80,6 +75,7 @@ export const AuthenticateUser = async (req: Request, res: Response) => {
       res.cookie('access', accessToken, {
         // httpOnly: true,
         sameSite: 'strict',
+        maxAge: 900 * 1000,
         // secure: true, //localhost is http
       });
 

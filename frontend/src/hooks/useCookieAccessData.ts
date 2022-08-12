@@ -39,7 +39,7 @@ const useCookieAccessData = ({
   idx,
 }: ICookieTokenDeconstruct): IAccessTokenData | null => {
   const token = new AccessTokenProcessor({ cookie: cookie, idx: idx });
-  const { isError, isSuccess } = useVerifyAuthToken();
+  const { isError } = useVerifyAuthToken();
 
   try {
     const data = token.decodeBase64(

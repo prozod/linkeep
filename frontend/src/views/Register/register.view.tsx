@@ -45,7 +45,10 @@ const Register = () => {
     <div className={joinArgs(registerStyles.wrapper)}>
       <Navigation />
       <div className={joinArgs(registerStyles.body)}>
-        <Form onSubmit={onSubmit}>
+        <Form
+          onSubmit={onSubmit}
+          className={joinArgs(formStyles.authFormDefaults)}
+        >
           <div className={joinArgs(formStyles.headerWrapper)}>
             <h1 className={joinArgs(formStyles.headerTitle)}>
               <img src={LogoLinkeep} width={24} height={24} className='mr-2' />

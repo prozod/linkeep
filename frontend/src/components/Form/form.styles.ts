@@ -1,6 +1,9 @@
 export const formStyles = {
   defaults: [
-    'p-8 py-12 flex justify-center flex-col w-[fit-content] max-w-lg bg-slate-800 shadow-lg rounded-lg border-[1px] border-indigo-400',
+    'flex justify-center items-center w-[fit-content] max-w-lg bg-slate-800 rounded-lg space-x-2',
+  ],
+  authFormDefaults: [
+    'p-8 py-12 flex-col border-[1px] border-indigo-400 shadow-lg',
   ],
   labelandInputWrapper: [
     'relative z-0 w-full min-w-[20vw] mb-6 group flex items-center',
@@ -15,7 +18,7 @@ export const formStyles = {
     'peer-focus:font-medium absolute text-xs text-indigo-500 dark:text-indigo-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6',
   ],
   formButton: [
-    'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-1 focus:outline-none focus:ring-indigo-100 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-100',
+    'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-1 focus:outline-none focus:ring-indigo-100 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-100 h-[fit-content]',
   ],
   headerWrapper: ['text-white text-center pb-12 pt-2'],
   headerTitle: ['font-bold text-2xl flex items-center  justify-center mb-2'],

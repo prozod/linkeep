@@ -8,10 +8,13 @@ const router = express.Router();
 
 // CREATE A NEW COLLECTION
 router.post('/', validateExistingJWT, collectionController.CreateCollection);
+
+// DELETE A COLLECTION
+router.delete('/', validateExistingJWT, collectionController.DeleteCollection);
 //
 // DELETE AN ITEM
 router.delete(
-  '/',
+  '/item',
   validateExistingJWT,
   collectionController.DeleteCollectionItem
 );

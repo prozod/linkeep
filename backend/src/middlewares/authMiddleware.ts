@@ -13,10 +13,6 @@ export const authenticateToken = (
   const token = header && header.split(' ')[1];
   console.log('authToken or cookie coming from client', token, cookie);
   console.log('authTokenENV from server', process.env.JWT_ACCESS_TOKEN);
-  // if (!header || token == null)
-  //   return res
-  //     .status(403)
-  //     .send('Authorization Bearer token or HTTPOnly Cookie is missing!');
 
   jwt.verify(
     token ? token : cookie,

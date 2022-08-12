@@ -11,8 +11,17 @@ type Register = {
 
 export type UserServicesType = Login | Register;
 
-export interface ICollectionItem {
+export interface ICollection {
+  createdAt: string;
   id: string;
+  ownerId: string;
+  title: string;
+  updatedAt: string;
+}
+
+export interface ICollectionItem {
+  id?: string;
+  title?: string;
   url: string;
   collectionId: string;
 }
@@ -37,3 +46,24 @@ export interface IAccessTokenData {
 export type CreateNewCollection = {
   url: string;
 };
+
+export interface ScrapeAPIRes {
+  meta: {
+    description?: string;
+    title?: string;
+  };
+  og: {
+    image?: Image;
+    description?: string;
+    title?: string;
+    site_name?: string;
+    type?: string;
+    url?: string;
+    video?: string;
+  };
+  twitter?: {
+    site?: string;
+    creator?: string;
+    image?: string;
+  };
+}
