@@ -5,17 +5,17 @@ Offers full CRUD capabilities and import/exports for bookmarks via the Chrome ex
 Even though this project is not finished (read below), I thought it'll be a good showcase for my portfolio (code style, different approaches I did etc.).  
 
 ### Project is currently on hold
-  - This project started as a practice to write a working REST API with Node and a basic authentication flow with JWT and password hashing, therefore I never actually expected to write a frontend or anything more to it.
 <details>
 <summary>
- Main reasons (personal reasons that made me stop working on this, for now): 
+**Main reasons why(personal reasons that made me stop working on this, for now):**
 </summary>
 <br>
-    - Code is really messy and all over the place, needs a  lot of refactoring (both backend and frontend).
-    - TailwindCSS uses a mobile first approach, so I just rushed to style it quickly (for desktop, therefore not responsive) and even separated the JSX code from the Tailwind classes.
-    - No actual error handling/error tracking.
-    - No input data validation (there is a bit of Zod on some endpoints, but minimal).
-    - No test coverage.
+- Initially, this project started as a practice to write a working REST API with Node and a basic authentication flow with JWT and password hashing, therefore I never actually expected to write a frontend or anything more to it.  
+- Code is really messy and all over the place, needs a  lot of refactoring (both backend and frontend).  
+- TailwindCSS uses a mobile first approach, so I just rushed to style it quickly (for desktop, therefore not responsive) and even separated the JSX code from the Tailwind classes.  
+- No actual error handling/error tracking.  
+- No input data validation (there is a bit of Zod on some endpoints, but minimal).  
+- No test coverage.  
 </details>
 
 #### Information (tech stack)
