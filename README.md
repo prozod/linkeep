@@ -15,6 +15,7 @@ Even though this project is not finished (read below), I thought it'll be a good
 - No actual error handling/error tracking.  
 - No input data validation (there is a bit of Zod on some endpoints, but minimal).  
 - No test coverage.  
+- [NOT RELATED TO THE PROJECT, MORE PERSONAL]: I wanted to stop spending so much time all over the place (backend, frontend, database) and niche down on more specific things to become good at them, things such as Design Systems, Accesibility, Motion and TypeScript... at least for a while.
 
 #### Information (tech stack)
 - Linkeep tech-stack: 
