@@ -1,3 +1,6 @@
+![Screenshot](screencap1.png)
+![Screenshot](screencap2.png)
+
 # Linkeep ALPHA
 ### About (what is it?)
 Repo for Linkeep, a webapp, browser extension made to manage and store your bookmarks efficiently.  
