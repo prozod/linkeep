@@ -12,11 +12,11 @@ type Register = {
 export type UserServicesType = Login | Register;
 
 export interface ICollection {
-  createdAt: string;
-  id: string;
-  ownerId: string;
+  createdAt?: string;
+  id?: string;
+  ownerId?: string;
   title: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface ICollectionItem {
@@ -29,7 +29,7 @@ export interface ICollectionItem {
 export interface ICollectionDataResponse {
   id: string;
   createdAt: string | Date;
-  items: ICollectionItem[];
+  items?: ICollectionItem[];
   ownerId: string;
   title: string;
   updatedAt: string | Date;
@@ -47,13 +47,20 @@ export type CreateNewCollection = {
   url: string;
 };
 
+type OGImage = {
+  url?: string;
+  width?: string;
+  height?: string;
+  type?: string;
+};
+
 export interface ScrapeAPIRes {
   meta: {
     description?: string;
     title?: string;
   };
   og: {
-    image?: Image;
+    image?: OGImage;
     description?: string;
     title?: string;
     site_name?: string;

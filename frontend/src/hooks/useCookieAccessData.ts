@@ -1,5 +1,4 @@
 import { Buffer } from 'buffer';
-import { useEffect, useState } from 'react';
 import { IAccessTokenData } from 'types/dataTypes';
 import useVerifyAuthToken from './useVerifyAuthToken';
 interface ICookieTokenDeconstruct {
@@ -40,12 +39,12 @@ const useCookieAccessData = ({
 }: ICookieTokenDeconstruct): IAccessTokenData | null => {
   const token = new AccessTokenProcessor({ cookie: cookie, idx: idx });
   const { isError } = useVerifyAuthToken();
-
   try {
     const data = token.decodeBase64(
       token.splitJWTPayload(token.readCookie() as string)
     );
     localStorage.setItem('isAuthenticated', 'true');
+    // ---------------
     return token.parseToJSON(data);
   } catch (e: unknown) {
     if (isError) {

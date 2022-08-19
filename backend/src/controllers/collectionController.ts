@@ -58,6 +58,7 @@ const RequestBodyTypeGuard = z.object({
 });
 
 export const GetUserCollections = async (req: Request, res: Response) => {
+  console.log(req.body);
   const parsedRequestBody = RequestBodyTypeGuard.safeParse(req.body);
   if (parsedRequestBody.success) {
     const query = collectionService.QueryUserCollection(req.body.id);

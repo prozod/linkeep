@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" },
+    {
+      "source": "/dashboard",
+      "destination": "https://linkeep.vercel.app/dashboard"
+    }
+  ]
+}

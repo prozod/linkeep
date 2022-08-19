@@ -4,8 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  width: fit-content;
+  min-width: 100vw;
+}
+
 body {
   background: #0f172a;
+  width: 100%;
   color: #fff;
   font-family: 'Inter', sans-serif;
 }

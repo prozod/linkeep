@@ -6,6 +6,13 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    fs: {
+      strict: false,
+    },
+  },
   plugins: [react(), tsconfigPaths()],
   // resolve: {
   //   alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],

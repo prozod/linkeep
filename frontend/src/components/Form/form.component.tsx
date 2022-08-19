@@ -1,12 +1,16 @@
-import joinArgs from '@utils/joinArgs';
-import { useEffect, useRef } from 'react';
-import { formStyles } from './form.styles';
+import joinArgs from "@utils/joinArgs";
+import { useRef } from "react";
+import { formStyles } from "./form.styles";
 
 const Form = (props: React.FormHTMLAttributes<HTMLFormElement>) => {
   return (
     <form
       {...props}
-      className={joinArgs([formStyles.defaults, props?.className])}
+      className={
+        props?.className !== undefined
+          ? joinArgs([...formStyles.defaults, props.className])
+          : joinArgs(formStyles.defaults)
+      }
     >
       {props.children}
     </form>
@@ -15,9 +19,7 @@ const Form = (props: React.FormHTMLAttributes<HTMLFormElement>) => {
 
 export default Form;
 
-Form.Input = function FormInput(
-  props: React.InputHTMLAttributes<HTMLInputElement>
-) {
+Form.Input = function FormInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   const myRef = useRef<HTMLInputElement>(null);
 
   // useEffect(() => {
@@ -28,31 +30,35 @@ Form.Input = function FormInput(
     <input
       {...props}
       ref={myRef}
-      className={joinArgs([formStyles.input, props?.className])}
+      className={
+        props?.className !== undefined ? joinArgs([...formStyles.input, props.className]) : joinArgs(formStyles.input)
+      }
     />
   );
 };
 
-Form.Label = function FormLabel(
-  props: React.LabelHTMLAttributes<HTMLLabelElement>
-) {
+Form.Label = function FormLabel(props: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
       {...props}
-      className={joinArgs([formStyles.label, props?.className])}
+      className={
+        props?.className !== undefined ? joinArgs([...formStyles.label, props.className]) : joinArgs(formStyles.label)
+      }
     >
       {props.children}
     </label>
   );
 };
 
-Form.Button = function FormButton(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>
-) {
+Form.Button = function FormButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       {...props}
-      className={joinArgs([formStyles.formButton, props?.className])}
+      className={
+        props?.className !== undefined
+          ? joinArgs([...formStyles.formButton, props.className])
+          : joinArgs(formStyles.formButton)
+      }
     >
       {props.children}
     </button>

@@ -23,7 +23,7 @@ function Home() {
             that you can organize and explore from anywhere. Made for page
             hoarders and the painfully disorganized people.
           </p>
-          <div className='space-x-4 mt-12'>
+          <div className='flex flex-col space-x-0 space-y-4 lg:space-y-0 lg:space-x-4 mt-12 lg:flex-row'>
             <Button
               className={joinArgs([
                 buttonAnimations.heroCTA,
@@ -49,7 +49,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <footer className='w-full flex justify-center items-center py-4 px-8 border-t-[1px] border-white border-opacity-20 z-10'>
+      <footer className='w-full flex justify-center items-center sm:px-4 py-4 lg:px-8 border-t-[1px] border-white border-opacity-20 z-10'>
         <div className='m-auto  flex justify-between px-2 w-full opacity-70 font-thin text-xs'>
           <p>Linkeep © Copyright 2022</p>
           <a

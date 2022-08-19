@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node build/server.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/server.js\"",
+    "start": "NODE_ENV=production node build/server.js",
+    "dev": "NODE_ENV=development concurrently \"npx tsc --watch\" \"nodemon -q build/server.js\"",
     "dev:migrate": "npx prisma migrate dev --name init"
   },
   "keywords": [],

@@ -1,7 +1,15 @@
-const url = 'http://localhost:5000';
+import { SuccessfulAuthResponse } from '@hooks/useAuth';
+
+const url =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_PROD_URL
+    : import.meta.env.VITE_DEV_URL;
+
+console.log('AUTH URL: ', url);
+console.log('MODE: ', import.meta.env.MODE);
 
 const authServices = {
-  loginUser: async function <T>(data: T) {
+  loginUser: async function <T>(data: T): Promise<T | SuccessfulAuthResponse> {
     const res = await fetch(`${url}/users/login`, {
       method: 'POST',
       // credentials: 'same-origin',
@@ -11,8 +19,7 @@ const authServices = {
       },
       body: JSON.stringify(data),
     });
-    const resData = res.json();
-    return resData;
+    return res.json();
   },
 
   logoutUser: async function () {
@@ -25,8 +32,10 @@ const authServices = {
     });
   },
 
-  registerUser: async function <T>(data: T) {
-    await fetch(`${url}/users/register`, {
+  registerUser: async function <T>(
+    data: T
+  ): Promise<T | SuccessfulAuthResponse> {
+    const res = await fetch(`${url}/users/register`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -34,6 +43,7 @@ const authServices = {
       },
       body: JSON.stringify(data),
     });
+    return res.json();
   },
 
   checkAuthToken: async function () {
@@ -45,13 +55,14 @@ const authServices = {
           'Content-Type': 'application/json',
         },
       });
+
       const resData = await res.json();
       if (resData.issues) {
+        localStorage.removeItem('isAuthenticated');
         throw new Error('Something went wrong when refreshing the auth token.');
       }
       return resData;
     } catch (e: unknown) {
-      localStorage.removeItem('isAuthenticated');
       console.error(e);
     }
   },

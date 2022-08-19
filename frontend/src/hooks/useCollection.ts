@@ -1,11 +1,11 @@
 import { queryClient } from 'main';
 import { useMutation, useQuery } from 'react-query';
-import {
-  ICollection,
-  ICollectionDataResponse,
-  ICollectionItem,
-} from 'types/dataTypes';
-const url = 'http://localhost:5000';
+import { ICollection, ICollectionDataResponse } from 'types/dataTypes';
+
+const url =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_PROD_URL
+    : import.meta.env.VITE_DEV_URL;
 
 interface QueryActionType {
   get: ICollectionDataResponse[];
@@ -104,10 +104,10 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
             console.log('delete collection data:', data);
             await queryClient.cancelQueries('getCollections');
             const prevUrlCollection =
-              queryClient.getQueryData<ICollection[]>('getCollections');
+              queryClient.getQueryData<ICollection>('getCollections');
 
             if (prevUrlCollection) {
-              queryClient.setQueryData<ICollection>('getCollections', {
+              queryClient.setQueryData('getCollections', {
                 prevUrlCollection,
               });
             }
@@ -116,7 +116,7 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
           },
           onError: (_err, _variables, context) => {
             if (context?.prevUrlCollection) {
-              queryClient.setQueryData<ICollectionDataResponse>(
+              queryClient.setQueryData<ICollection>(
                 ['getCollectionById', `${context.prevUrlCollection.id}`],
                 context?.prevUrlCollection
               );
@@ -133,7 +133,7 @@ const useCollectionMutation = <T extends keyof MutationActionType>(
     case 'create':
       return useMutation(
         async (
-          data: Pick<ICollectionItem, 'title'>
+          data: Pick<ICollection, 'title'>
         ): Promise<MutationActionType[typeof action]> => {
           try {
             const res = await fetch(`${url}/collection`, {

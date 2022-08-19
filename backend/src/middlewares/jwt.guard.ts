@@ -46,10 +46,11 @@ export const validateExistingJWT = async (
               });
 
               res.cookie('access', newAccessToken, {
-                // httpOnly: true,
-                sameSite: 'strict',
+                // httpOnly: true, // im accessing it client side to read the user info (nothing sensitive, just email and userid)
+                // sameSite: 'strict', // host port is not the same, strict implies same address, same port, same everything (try a proxy)
+                sameSite: 'none',
                 maxAge: 900 * 1000,
-                // secure: true, //localhost is http
+                secure: true, //localhost is http
               });
 
               req.body = { ...data, ...req.body };

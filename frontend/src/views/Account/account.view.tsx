@@ -13,6 +13,8 @@ function Account() {
   const navigate = useNavigate();
   const data = useCookieAccessData({ cookie: 'access', idx: 1 });
 
+  console.log('[Account View]: useCookieAccessData: ', data);
+
   const logout = () => {
     authServices.logoutUser();
     localStorage.removeItem('access');
@@ -36,8 +38,10 @@ function Account() {
               Acccount overview
             </p>
             <p className='text-slate-400 text-sm'>
-              Email:{' '}
-              <span className='text-white'>{data !== null && data.email}</span>{' '}
+              Email:
+              <span className='text-white'>
+                {data !== null && data.email}
+              </span>{' '}
             </p>
           </div>
           <div>

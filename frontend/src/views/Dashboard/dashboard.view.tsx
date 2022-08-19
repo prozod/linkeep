@@ -36,7 +36,7 @@ const Dashboard = () => {
                 <p>{collection?.data?.title}</p>
               </Board.Title>
               <Card.Wrapper>
-                {collection?.data.items.map((item) => {
+                {collection?.data?.items?.map((item) => {
                   return <Card key={item.id} {...item} />;
                 })}
               </Card.Wrapper>

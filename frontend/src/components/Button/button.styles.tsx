@@ -1,5 +1,5 @@
 export const buttonStyles = {
-  defaults: ['px-6 py-4 rounded-md transition-all text-white'],
+  defaults: ['px-6 py-4 rounded-md transition-all text-white w-full'],
   outline: ['border-2 border-pink-300 text-pink-300'],
   heroCTA: [
     'bg-gradient-to-r from-indigo-700 to-blue-800 text-white px-8 py-4 transition-all shadow-lg border-[1px] border-indigo-500',

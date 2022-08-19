@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import { UserTokenInfoDTO } from '../models/auth.dto';
 import { generateAccessToken } from '../utils/tokenUtils';
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
+console.log('NODE ENVVVVVV IN TOKENCTRL', process.env.NODE_ENV);
+console.log('DB USED:', process.env.DATABASE_URL);
 
 const cookieType = z.object({
   refresh: z.string(),
@@ -56,9 +58,10 @@ export const checkExistingRefreshToken = async (
 
                 res.cookie('access', newAccessToken, {
                   // httpOnly: true, // im accessing it client side to read the user info (nothing sensitive, just email and userid)
-                  sameSite: 'strict',
+                  // sameSite: 'strict', // host port is not the same, strict implies same address, same port, same everything (try a proxy)
+                  sameSite: 'none',
                   maxAge: 900 * 1000,
-                  // secure: true, //localhost is http
+                  secure: true, //localhost is http
                 });
 
                 res.status(200).send({

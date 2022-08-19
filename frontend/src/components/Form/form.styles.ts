@@ -1,9 +1,9 @@
 export const formStyles = {
   defaults: [
-    'flex justify-center items-center w-[fit-content] max-w-lg bg-slate-800 rounded-lg space-x-2',
+    'flex justify-center items-center w-full h-full lg:w-[fit-content] lg:max-w-lg lg:bg-slate-800 rounded-lg space-x-2',
   ],
   authFormDefaults: [
-    'p-8 py-12 flex-col border-[1px] border-indigo-400 shadow-lg',
+    'p-8 py-12 flex-col lg:border-[1px] lg:border-indigo-400 shadow-lg',
   ],
   labelandInputWrapper: [
     'relative z-0 w-full min-w-[20vw] mb-6 group flex items-center',

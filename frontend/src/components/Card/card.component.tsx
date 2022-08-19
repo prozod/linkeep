@@ -1,26 +1,21 @@
-import joinArgs from '@utils/joinArgs';
-import { LinkPreview } from '@dhaiwat10/react-link-preview';
-import { cardStyles } from './card.styles';
-import { XCircleIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
-import { ICollectionItem, ScrapeAPIRes } from 'types/dataTypes';
-import { useItemMutation } from '@hooks/useItem';
-import { useQuery } from 'react-query';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-
+import joinArgs from "@utils/joinArgs";
+import { cardStyles } from "./card.styles";
+import { XCircleIcon } from "@heroicons/react/solid";
+import { useState } from "react";
+import { ICollectionItem, ScrapeAPIRes } from "types/dataTypes";
+import { useItemMutation } from "@hooks/useItem";
+import { useQuery } from "react-query";
 function Card(item: ICollectionItem) {
   const [isHovering, setIsHovering] = useState(false);
-  const mutation = useItemMutation('delete');
+  const mutation = useItemMutation("delete");
 
-  const query = useQuery(
-    [`scrapeUrl, ${item.url}`],
-    async (): Promise<ScrapeAPIRes> => {
-      const res = await fetch(`http://localhost:5000/scrape?url=${item.url}`);
-      const data = await res.json();
-      return data;
-    }
-  );
+  const url = import.meta.env.MODE === "production" ? import.meta.env.VITE_PROD_URL : import.meta.env.VITE_DEV_URL;
+
+  const query = useQuery([`scrapeUrl, ${item.url}`], async (): Promise<ScrapeAPIRes> => {
+    const res = await fetch(`${url}/scrape?url=${item.url}`);
+    const data = await res.json();
+    return data;
+  });
 
   return (
     <>
@@ -44,7 +39,7 @@ function Card(item: ICollectionItem) {
             <XCircleIcon
               width={36}
               height={36}
-              className='absolute shadow-lg z-10 right-[-10px] bottom-[-10px] text-indigo-500 animate-pulse transition-all hover:animate-none'
+              className="absolute shadow-lg z-10 right-[-10px] bottom-[-10px] text-indigo-500 animate-pulse transition-all hover:animate-none"
               onClick={() => {
                 console.log(item?.id);
                 mutation?.mutate({
@@ -57,25 +52,19 @@ function Card(item: ICollectionItem) {
           )}
           <div
             className={joinArgs(cardStyles.link_wrapper)}
-            onClick={() => window.open(`${query?.data?.og.url}`, '_blank')}
+            onClick={() => window.open(`${query?.data?.og.url}`, "_blank")}
           >
             <div className={joinArgs(cardStyles.link_image_container)}>
               <img
                 className={joinArgs(cardStyles.link_image)}
-                src={query?.data?.og.image.url}
+                src={query?.data?.og?.image?.url}
                 alt={query?.data?.og.title}
               />
             </div>
             <div className={joinArgs(cardStyles.link_info)}>
-              <h1 className={joinArgs(cardStyles.link_title)}>
-                {query?.data?.og.title}
-              </h1>
-              <p className={joinArgs(cardStyles.link_description)}>
-                {query?.data?.og.description}
-              </p>
-              <p className={joinArgs(cardStyles.link_url)}>
-                {query?.data?.og.url}
-              </p>
+              <h1 className={joinArgs(cardStyles.link_title)}>{query?.data?.og.title}</h1>
+              <p className={joinArgs(cardStyles.link_description)}>{query?.data?.og.description}</p>
+              <p className={joinArgs(cardStyles.link_url)}>{query?.data?.og.url}</p>
             </div>
           </div>
         </div>
@@ -86,14 +75,6 @@ function Card(item: ICollectionItem) {
 
 export default Card;
 
-Card.Wrapper = function CardWrapper({
-  children,
-}: {
-  children: JSX.Element | React.ReactNode;
-}) {
-  return (
-    <div className='flex flex-wrap items-center gap-2 lg:gap-4 transition-all'>
-      {children}
-    </div>
-  );
+Card.Wrapper = function CardWrapper({ children }: { children: JSX.Element | React.ReactNode }) {
+  return <div className="flex flex-wrap items-center gap-2 lg:gap-4 transition-all">{children}</div>;
 };

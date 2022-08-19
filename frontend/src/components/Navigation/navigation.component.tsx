@@ -42,7 +42,7 @@ function Navigation() {
         <div className={joinArgs([Logo])}>
           <img src={LogoLinkeep} width={28} height={28} className='mr-2' />
           <button onClick={() => navigate('/')}>Linkeep</button>
-          <span className='bg-gradient-to-r from-blue-700 to-indigo-800 shadow-sm text-white text-[0.5rem] w-[fit-content] uppercase rounded-md ml-2 px-2 font-bold'>
+          <span className='bg-gradient-to-r from-blue-700 to-indigo-800 shadow-sm text-white text-[0.5rem] w-[fit-content] uppercase rounded-md ml-2 px-2 font-bold truncate'>
             ALPHA VERSION
           </span>
         </div>

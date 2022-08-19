@@ -19,11 +19,10 @@ export const scrapeUrl = async (req: Request, res: Response) => {
     const response = await fetch(`${req.query.url}`);
     const data = await response.text();
     const og_metadata = await og_scraper(data);
-    app.redisClient.setEx(
-      `${req.query.url}`,
-      DEF_EXP_TIME,
-      JSON.stringify(og_metadata)
-    );
+    app.redisClient.set(`${req.query.url}`, JSON.stringify(og_metadata), {
+      EX: DEF_EXP_TIME,
+      NX: true,
+    });
     console.log('------------------------------------');
     console.log('SCRAPED NOW:', og_metadata);
     console.log('------------------------------------');

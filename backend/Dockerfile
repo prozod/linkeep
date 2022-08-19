@@ -1,4 +1,4 @@
-FROM node:lts-buster-slim AS base
+FROM --platform=linux/amd64 node:lts-buster-slim AS base
 
 RUN apt-get update && apt-get install libssl-dev ca-certificates -y
 RUN npm install -g pnpm
@@ -14,7 +14,9 @@ RUN pnpm install
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 5000
 
 # CMD npx prisma migrate deploy --name init && npm run dev
-CMD npx prisma migrate dev --schema ./prisma/schema.prisma && npm run dev
+CMD npx prisma migrate dev --schema ./prisma/schema.prisma && npm run start

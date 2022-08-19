@@ -14,9 +14,9 @@ type Register = {
 
 export type ServicesType = Login | Register;
 
-interface SuccessResponse {
-  name: string;
-  id: string;
+export interface SuccessfulAuthResponse {
+  name?: string;
+  id?: string;
   email: string;
   message?: string;
   access?: string;
@@ -25,19 +25,21 @@ interface SuccessResponse {
 type AuthActionTypes = 'login' | 'register';
 
 const useAuth = (action: AuthActionTypes) => {
-  return useMutation<SuccessResponse, React.ReactNode, ServicesType>((data) => {
-    return new Promise((resolve, reject) => {
-      switch (action) {
-        case 'login':
-          resolve(authServices.loginUser(data));
-          break;
-        case 'register':
-          resolve(authServices.registerUser(data));
-          break;
-      }
-      reject((err: string) => err);
-    });
-  });
+  return useMutation<SuccessfulAuthResponse, React.ReactNode, ServicesType>(
+    (data) => {
+      return new Promise((resolve, reject) => {
+        switch (action) {
+          case 'login':
+            resolve(authServices.loginUser(data));
+            break;
+          case 'register':
+            resolve(authServices.registerUser(data));
+            break;
+        }
+        reject((err: string) => err);
+      });
+    }
+  );
 };
 
 export default useAuth;

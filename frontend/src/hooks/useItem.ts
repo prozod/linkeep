@@ -1,7 +1,11 @@
 import { queryClient } from 'main';
 import { useMutation } from 'react-query';
 import { ICollectionDataResponse, ICollectionItem } from 'types/dataTypes';
-const url = 'http://localhost:5000';
+
+const url =
+  import.meta.env.MODE === 'production'
+    ? import.meta.env.VITE_PROD_URL
+    : import.meta.env.VITE_DEV_URL;
 
 interface MutationActionType {
   update: ICollectionDataResponse;
@@ -55,7 +59,7 @@ export const useItemMutation = <T extends keyof MutationActionType>(
                 ['getCollectionById', `${data.collectionId}`],
                 {
                   ...prevUrlCollection,
-                  items: [...prevUrlCollection.items, data],
+                  items: [...(<[]>prevUrlCollection.items), data],
                 }
               );
             }
@@ -120,7 +124,7 @@ export const useItemMutation = <T extends keyof MutationActionType>(
                 ['getCollectionById', `${data.collectionId}`],
                 {
                   ...prevUrlCollection,
-                  items: prevUrlCollection.items.filter(
+                  items: prevUrlCollection?.items?.filter(
                     (item) => item.id !== data.id
                   ),
                 }
