@@ -7,7 +7,11 @@ Repo for Linkeep, a webapp, browser extension made to manage and store your book
 Offers full CRUD capabilities and import/exports for bookmarks via the Chrome extension.  
 Even though this project is not finished (read below), I thought it'll be a good showcase for my portfolio (code style, different approaches I did etc.).  
 
-### Project is currently on hold
+## Project is currently on hold
+#### PROJECT IS NOT FUNCTIONAL ONLINE BECAUSE THE DATABASE IS CURRENTLY STOPPED DUE TO COSTS (MONTHLY FEES/CHARGES) - see tech stack below.
+Feel free to fork the repo and try it on your own machine, make sure to fill the environmental variables file.
+
+
 **Main reasons why(personal reasons that made me stop working on this, for now):**
 - Initially, this project started as a practice to write a working REST API with Node and a basic authentication flow with JWT and password hashing, therefore I never actually expected to write a frontend or anything more to it.  
 - Code is really messy and all over the place, needs a  lot of refactoring (both backend and frontend).  
